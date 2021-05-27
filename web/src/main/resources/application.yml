@@ -40,3 +40,17 @@ logging:
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.anshark.model
+
+#xxljob admin
+xxl:
+  job:
+    admin:
+      addresses: http://localhost:9990/xxl-job-admin/
+    accessToken:
+    executor:
+      address:
+      ip:
+      appname: gyadmin-xxljob
+      port: 9997
+      logpath: ./xxllog
+      logretentiondays: 30

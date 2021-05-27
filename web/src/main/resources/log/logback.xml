@@ -225,7 +225,7 @@
 
     <!--生产环境:输出到文件-->
     <springProfile name="pro">
-        <root level="info">
+        <root level="debug">
             <appender-ref ref="ASYNC_CONSOLE" />
             <appender-ref ref="ASYNC_DEBUG" />
             <appender-ref ref="ASYNC_INFO" />
