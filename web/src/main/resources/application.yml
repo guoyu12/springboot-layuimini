@@ -1,0 +1,42 @@
+server:
+  port: 9999
+spring:
+  application:
+    name: gyadmin
+  profiles:
+    active: pro
+  redis:
+    timeout: 5000
+    password: 123456
+    host: 127.0.0.1
+    port: 6379
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/gyadmin?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=CONVERT_TO_NULL
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 0
+      max-active: 10
+      min-idle: 0
+      max-wait: 60000
+      #以下是druid sql监控
+      use-global-data-source-stat: true
+      filters: mergeStat
+  freemarker:
+    charset: UTF-8
+    suffix: .ftl
+    content-type: text/html;charset=utf-8
+    template-loader-path: classpath:/templates
+    cache: false
+    check-template-location: true
+    settings:
+      datetime_format: yyyy-MM-dd HH:mm:ss
+      default_encoding: UTF-8
+      classic_compatible: true
+logging:
+  config: classpath:log/logback.xml
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.anshark.model
