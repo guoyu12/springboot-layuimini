@@ -125,8 +125,16 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
             requestParam = JSONObject.toJSONString(parameterMap);
         }
         gyRequestLog.setRequestParam(requestParam);
-        gyRequestLog.setResponseData(JSONObject.toJSONString(o));
-        gyRequestLog.setCode(((ResultType) o).getCode());
+
+        if(null != o){
+            if(o instanceof ResultType){
+                gyRequestLog.setResponseData(JSONObject.toJSONString(o));
+                gyRequestLog.setCode(((ResultType) o).getCode());
+            }else {
+                gyRequestLog.setResponseData(JSONObject.toJSONString(o));
+            }
+        }
+
         gyRequestLog.setIpAddr(IpUtils.getIp(request));
 
         gyRequestLogDao.save(gyRequestLog);
