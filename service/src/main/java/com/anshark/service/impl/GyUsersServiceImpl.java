@@ -2,9 +2,7 @@ package com.anshark.service.impl;
 
 import com.anshark.common.Constant;
 import com.anshark.dao.GyUsersDao;
-import com.anshark.exception.SysException;
 import com.anshark.model.GyUsers;
-import com.anshark.response.ResultState;
 import com.anshark.response.ResultType;
 import com.anshark.service.GyUsersService;
 import com.anshark.utils.JwtUtils;
@@ -62,36 +60,27 @@ public class GyUsersServiceImpl implements GyUsersService {
         String tokenKey = String.format(Constant.GYADMIN_TOKEN, gyUsers.getId());
 
         if (rememberMe) {
-            SessionUtil.setSession(request, Constant.LOGIN_WAY_REMEBER_ME, SessionUtil.IS_REMEBER_ME_TRUE);
             stringRedisTemplate.opsForValue().set(tokenKey, token, 7, TimeUnit.DAYS);
         } else {
-            SessionUtil.setSession(request, Constant.LOGIN_WAY_REMEBER_ME, SessionUtil.IS_REMEBER_ME_FALSE);
             SessionUtil.setSession(request, tokenKey, token);
         }
 
-        System.out.println("SessionUtil.getSession(request,Constant.LOGIN_WAY_REMEBER_ME) -> " + SessionUtil.getSession(request, Constant.LOGIN_WAY_REMEBER_ME));
         return ResultType.success(token);
     }
 
     @Override
     public ResultType logout(HttpServletRequest request, Integer userId) {
-        String loginWayRemeberMe = SessionUtil.getIsRemeberMe(request);
+        boolean loginWayRemeberMe = SessionUtil.getIsRemeberMe(request);
         String tokenKey = String.format(Constant.GYADMIN_TOKEN, userId);
-        switch (loginWayRemeberMe) {
-            //以记住我的方式登录
-            case SessionUtil.IS_REMEBER_ME_TRUE:
-                stringRedisTemplate.delete(tokenKey);
-                break;
-            //没有选择记住我的方式登录
-            case SessionUtil.IS_REMEBER_ME_FALSE:
-                String session = SessionUtil.getSession(request, tokenKey);
-                if (null != session) {
-                    //移除
-                    SessionUtil.remove(request, tokenKey);
-                }
-                break;
-            default:
-                throw new SysException(ResultState.SYS_EXIT);
+
+        if (loginWayRemeberMe) {
+            stringRedisTemplate.delete(tokenKey);
+        } else {
+            String session = (String) SessionUtil.getSession(request, tokenKey);
+            if (null != session) {
+                //移除
+                SessionUtil.remove(request, tokenKey);
+            }
         }
         return ResultType.success();
     }

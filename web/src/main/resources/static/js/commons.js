@@ -11,8 +11,10 @@ const LOGIN_OUT_URL = "/users/logout";
 //登录页
 const LOGIN_PAGE = "/login/page";
 
-
+//token
 const GYADMIN_TOKEN = "GYADMIN_TOKEN";
+//是否记住我
+const LOGIN_WAY_REMEBER_ME = "GYADMIN_REMEBER_ME";
 
 function setCookie(cname,cvalue,exdays){
     var d = new Date();

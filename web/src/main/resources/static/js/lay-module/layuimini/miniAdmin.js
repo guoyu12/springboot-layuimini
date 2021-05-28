@@ -47,6 +47,7 @@ layui.define(["jquery", "miniMenu", "element","miniTab", "miniTheme"], function 
                 dataType: "json",
                 beforeSend: function (request) {
                    request.setRequestHeader(GYADMIN_TOKEN, getCookie(GYADMIN_TOKEN));
+                    request.setRequestHeader(LOGIN_WAY_REMEBER_ME, getCookie(LOGIN_WAY_REMEBER_ME));
                 },
                 success: function (result) {
                     if (result == null) {

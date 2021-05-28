@@ -11,29 +11,35 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class SessionUtil {
 
-    public static final String IS_REMEBER_ME_TRUE = "true";
 
-    public static final String IS_REMEBER_ME_FALSE = "false";
+    public static final String REMEMBER_ME_TRUE = "true";
+    public static final String REMEMBER_ME_FALSE = "false";
 
     public static String getHeader(HttpServletRequest request, String name) {
         return request.getHeader(name);
     }
 
-    public static String getSession(HttpServletRequest request, String name) {
-        return (String) request.getSession().getAttribute(name);
+    public static Object getSession(HttpServletRequest request, String name) {
+        return request.getSession().getAttribute(name);
     }
 
     public static void remove(HttpServletRequest request, String name) {
         request.getSession().removeAttribute(name);
     }
 
-    public static void setSession(HttpServletRequest request, String name, String value) {
+    public static void setSession(HttpServletRequest request, String name, Object value) {
         request.getSession().setAttribute(name, value);
     }
 
-    public static String getIsRemeberMe(HttpServletRequest request) {
-        return getSession(request, Constant.LOGIN_WAY_REMEBER_ME);
+    public static boolean getIsRemeberMe(HttpServletRequest request) {
+        return rememberMe(getHeader(request, Constant.LOGIN_WAY_REMEBER_ME));
     }
 
+    public static boolean rememberMe(String session) {
+        if (null != session && REMEMBER_ME_TRUE.equals(session)) {
+            return true;
+        }
+        return false;
+    }
 
 }

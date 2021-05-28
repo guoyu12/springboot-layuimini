@@ -170,10 +170,13 @@
                     dataType: "json",
                     beforeSend: function (request) {
                         request.setRequestHeader(GYADMIN_TOKEN, getCookie(GYADMIN_TOKEN));
+                        console.log(getCookie(LOGIN_WAY_REMEBER_ME))
+                        request.setRequestHeader(LOGIN_WAY_REMEBER_ME, getCookie(LOGIN_WAY_REMEBER_ME));
                     },
                     success: function (result) {
                         if(result.code == 0){
                             delCookie(GYADMIN_TOKEN);
+                            delCookie(LOGIN_WAY_REMEBER_ME);
                             window.location.href = LOGIN_PAGE;
                         }else {
                             layer.msg(result.msg)

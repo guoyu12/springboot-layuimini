@@ -16,7 +16,7 @@ public class Constant {
     /**
      * 登录的方式 1代表是记住我
      */
-    public static final String LOGIN_WAY_REMEBER_ME = "LOGIN_WAY_REMEBER_ME";
+    public static final String LOGIN_WAY_REMEBER_ME = "GYADMIN_REMEBER_ME";
 
     /**
      * 登录TOKEN

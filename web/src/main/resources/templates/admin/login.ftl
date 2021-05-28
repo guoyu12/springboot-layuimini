@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <input type="checkbox" name="rememberMe" value="true" lay-skin="primary" title="记住密码">
+                    <input type="checkbox" name="rememberMe" value="true" lay-skin="primary" title="记住密码" checked="checked" id="rememberMe">
                 </div>
                 <div class="layui-form-item">
                     <button class="layui-btn layui-btn layui-btn-normal layui-btn-fluid" lay-submit="" lay-filter="login">登 入</button>
@@ -78,7 +78,6 @@
 
         // 粒子线条背景
         $(document).ready(function(){
-
             $('.layui-container').particleground({
                 dotColor:'#7ec7fd',
                 lineColor:'#7ec7fd'
@@ -112,6 +111,7 @@
                 layer.msg("您的cookie被禁用请打开!");
             }
 
+
             $.ajax({
                 url: LOGIN_URL,
                 type: 'POST',
@@ -121,8 +121,14 @@
                     if(result.code == 0){
                         layer.msg("登录成功");
                         console.log(result.data)
+
+                        var rememberMe = data.rememberMe;
+                        if(typeof(rememberMe) == "undefined" || null == rememberMe){
+                            rememberMe = false;
+                        }
                         //缓存cookie 7天
                         setCookie(GYADMIN_TOKEN, result.data,7);
+                        setCookie(LOGIN_WAY_REMEBER_ME,rememberMe,7);
                         window.location.href = LOGIN_SUC_URL;
                     }else {
                         layer.msg(result.msg);

@@ -54,12 +54,13 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
             }
         }
 
+
+        log.info("【CheckLoginInterceptor】 【preHandle】 isNeedCheck -- {}", isNeedCheck);
+
         if (isNeedCheck) {
 
-            String loginWayRemeberMe = SessionUtil.getIsRemeberMe(request);
-            if (null == loginWayRemeberMe) {
-                throw new SysException(ResultState.SYS_EXIT);
-            }
+            boolean loginWayRemeberMe = SessionUtil.getIsRemeberMe(request);
+            log.info("【CheckLoginInterceptor】 【preHandle】 loginWayRemeberMe -- {}", loginWayRemeberMe);
 
             String gyAdminToken = SessionUtil.getHeader(request, Constant.GYADMIN_TOKEN_COOKIE);
 
@@ -86,17 +87,17 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
         }
     }
 
-    Integer getUserId(Integer userId, String loginWayRemeberMe, HttpServletRequest request) {
+    Integer getUserId(Integer userId, boolean loginWayRemeberMe, HttpServletRequest request) {
 
         String tokenKey = String.format(Constant.GYADMIN_TOKEN, userId);
 
-        if (SessionUtil.IS_REMEBER_ME_FALSE.equals(loginWayRemeberMe)) {
+        if (!loginWayRemeberMe) {
             String header = (String) request.getSession().getAttribute(tokenKey);
             if (StringUtils.isEmpty(header)) {
                 throw new SysException(ResultState.SYS_EXIT);
             }
             return JwtUtils.getUserId(header);
-        } else if (SessionUtil.IS_REMEBER_ME_TRUE.equals(loginWayRemeberMe)) {
+        } else if (loginWayRemeberMe) {
             String val = stringRedisTemplate.opsForValue().get(tokenKey);
             if (StringUtils.isEmpty(val)) {
                 throw new SysException(ResultState.SYS_EXIT);
