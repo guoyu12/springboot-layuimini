@@ -17,7 +17,7 @@ public class GyAdminConfig implements WebMvcConfigurer {
     @Autowired
     private CheckLoginInterceptor checkLoginInterceptor;
 
-    public static final String[] excludeUrl = {"/static/**","/error","/favicon.ico","/users/page/setting.html","/users/page"};
+    public static final String[] excludeUrl = {"/static/**","/error","/favicon.ico","/users/page/setting.html","/users/page","/error"};
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
