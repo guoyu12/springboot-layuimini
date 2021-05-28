@@ -16,4 +16,10 @@ public interface GyMenusService {
      */
     ResultType getMenus(Integer userId);
 
+    /**
+     * 权限管理
+     * @return
+     */
+    ResultType list();
+
 }

@@ -26,11 +26,26 @@ public class GyMenusDaoImpl implements GyMenusDao {
         QueryWrapper<GyMenus> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("parent_id", pid);
         queryWrapper.eq("type", type);
+        queryWrapper.eq("is_deleted", 0);
         queryWrapper.orderByAsc("sort");
         if(null != ids && ids.size() > 0){
             queryWrapper.in("id", ids);
         }
         return gyMenusMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<GyMenus> list() {
+        QueryWrapper<GyMenus> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("is_deleted", 0);
+        return gyMenusMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public Integer count() {
+        QueryWrapper<GyMenus> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("is_deleted", 0);
+        return gyMenusMapper.selectCount(queryWrapper);
     }
 
 }

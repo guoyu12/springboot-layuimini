@@ -14,9 +14,32 @@ layui.define(['layer', 'table'], function (exports) {
             if (param.data) {
                 treetable.init(param, param.data);
             } else {
-                $.getJSON(param.url, param.where, function (res) {
-                    treetable.init(param, res.data);
+
+                $.ajax({
+                    url: param.url,
+                    type: 'POST',
+                    dataType: "json",
+                    beforeSend: function (request) {
+                        request.setRequestHeader(GYADMIN_TOKEN, getCookie(GYADMIN_TOKEN));
+                        console.log(getCookie(LOGIN_WAY_REMEBER_ME))
+                        request.setRequestHeader(LOGIN_WAY_REMEBER_ME, getCookie(LOGIN_WAY_REMEBER_ME));
+                    },
+                    success: function (result) {
+                        if(result.code == 0){
+                            treetable.init(param, result.data);
+                        }else {
+                            layer.msg(result.msg)
+                        }
+                    },
+                    error: function () {
+                        layer.msg("网络错误");
+                    }
+
                 });
+
+                // $.getJSON(param.url, param.where, function (res) {
+                //
+                // });
             }
         },
         // 渲染表格

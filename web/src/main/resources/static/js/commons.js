@@ -10,6 +10,8 @@ const LOGIN_SUC_DATA_URL = "/users/indexData";
 const LOGIN_OUT_URL = "/users/logout";
 //登录页
 const LOGIN_PAGE = "/login/page";
+//菜单栏数据请求
+const MENU_URL = "/gyMenus/list";
 
 //token
 const GYADMIN_TOKEN = "GYADMIN_TOKEN";

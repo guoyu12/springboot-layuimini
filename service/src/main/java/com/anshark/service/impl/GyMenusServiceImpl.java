@@ -5,10 +5,15 @@ import com.anshark.model.GyMenus;
 import com.anshark.response.ResultType;
 import com.anshark.service.GyMenusService;
 import com.anshark.service.GyUserPermService;
+import com.anshark.vo.Menu;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +57,46 @@ public class GyMenusServiceImpl implements GyMenusService {
         map.put("menuInfo", menuInfo);
 
         return ResultType.success(map);
+    }
+
+    @Override
+    public ResultType list() {
+
+        List<GyMenus> list = gyMenusDao.list();
+        return ResultType.success(getMenuList(list));
+    }
+
+    public List<Menu> getMenuList(List<GyMenus> list){
+        List<Menu> menus = new ArrayList<>();
+        Menu one = new Menu();
+        one.setAuthorityId(0);
+        one.setAuthorityName("权限管理");
+        one.setOrderNumber(1);
+        one.setMenuUrl(null);
+        one.setMenuIcon("layui-icon-set");
+        one.setCreateTime(LocalDateTime.now());
+        one.setAuthority(null);
+        one.setChecked(0);
+        one.setUpdateTime(LocalDateTime.now());
+        one.setIsMenu(0);
+        one.setParentId(-1);
+        menus.add(one);
+        list.stream().forEach(s -> {
+            Menu menu = new Menu();
+            menu.setAuthorityId(s.getId());
+            menu.setAuthorityName(s.getTitle());
+            menu.setOrderNumber(s.getSort());
+            menu.setMenuUrl(s.getHref());
+            menu.setMenuIcon(s.getIcon());
+            menu.setCreateTime(s.getCreateAt());
+            menu.setAuthority(null);
+            menu.setChecked(0);
+            menu.setUpdateTime(s.getUpdateAt());
+            menu.setIsMenu(s.getIsMenu());
+            menu.setParentId(s.getParentId());
+            menus.add(menu);
+        });
+        return menus;
     }
 
 

@@ -21,4 +21,16 @@ public interface GyMenusDao {
      */
     List<GyMenus> getMenusBy(Integer pid, Integer type, List<Integer> ids);
 
+    /**
+     * 查询所有数据
+     * @return
+     */
+    List<GyMenus> list();
+
+    /**
+     * 获取总数
+     * @return
+     */
+    Integer count();
+
 }

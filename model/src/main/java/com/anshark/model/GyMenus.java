@@ -75,5 +75,7 @@ public class GyMenus implements Serializable {
     @TableField(exist = false)
     private List<GyMenus> child;
 
+    private Integer isMenu;
+
 
 }

@@ -186,7 +186,7 @@
                         layer.msg("网络错误");
                     }
 
-                })
+                });
             });
 
             // layer.msg('退出登录成功', function () {
