@@ -16,87 +16,111 @@
 <div class="layuimini-container">
     <div class="layuimini-main">
 
-        <div class="layui-form layuimini-form">
-            <div class="layui-form-item">
-                <label class="layui-form-label required">网站名称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="sitename" lay-verify="required" lay-reqtext="网站域名不能为空" placeholder="请输入网站名称"  value="layuimini" class="layui-input">
-                    <tip>填写自己部署网站的名称。</tip>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label required">网站域名</label>
-                <div class="layui-input-block">
-                    <input type="text" name="domain" lay-verify="required" lay-reqtext="网站域名不能为空" placeholder="请输入网站域名"  value="http://layuimini.99php.cn" class="layui-input">
-                </div>
-            </div>
-
-            <div class="layui-form-item">
-                <label class="layui-form-label">缓存时间</label>
-                <div class="layui-input-inline" style="width: 80px;">
-                    <input type="text" name="cache" lay-verify="number" value="0" class="layui-input">
-                </div>
-                <div class="layui-input-inline layui-input-company">分钟</div>
-                <div class="layui-form-mid layui-word-aux">本地开发一般推荐设置为 0，线上环境建议设置为 10。</div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">最大文件上传</label>
-                <div class="layui-input-inline" style="width: 80px;">
-                    <input type="text" name="cache" lay-verify="number" value="2048" class="layui-input">
-                </div>
-                <div class="layui-input-inline layui-input-company">KB</div>
-                <div class="layui-form-mid layui-word-aux">提示：1 M = 1024 KB</div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">上传文件类型</label>
-                <div class="layui-input-block">
-                    <input type="text" name="cache" value="png|gif|jpg|jpeg|zip|rar" class="layui-input">
-                </div>
-            </div>
-
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label required">首页标题</label>
-                <div class="layui-input-block">
-                    <textarea name="title" class="layui-textarea">layuimini 简洁易用后台管理模板</textarea>
-                </div>
-            </div>
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">META关键词</label>
-                <div class="layui-input-block">
-                    <textarea name="keywords" class="layui-textarea" placeholder="多个关键词用英文状态 , 号分割"></textarea>
-                </div>
-            </div>
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">META描述</label>
-                <div class="layui-input-block">
-                    <textarea name="descript" class="layui-textarea">layuimini，最简洁、清爽、易用的layui后台框架模板。</textarea>
-                </div>
-            </div>
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label required">版权信息</label>
-                <div class="layui-input-block">
-                    <textarea name="copyright" class="layui-textarea">© 2019 layuimini.99php.cn MIT license</textarea>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="setting">确认保存</button>
-                </div>
-            </div>
+        <div class="layui-form layuimini-form" id="sysConfig">
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label required">网站名称</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="text" name="website" lay-verify="required" lay-reqtext="网站域名不能为空" placeholder="请输入网站名称"  value="layuimini" class="layui-input">-->
+<!--                    <tip>填写自己部署网站的名称。</tip>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <div class="layui-input-block">-->
+<!--                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="setting">确认保存</button>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </div>
 </div>
+<script src="/static/js/commons.js" charset="UTF-8"></script>
 <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script>
-    layui.use(['form'], function () {
+    layui.use(['jquery','form'], function () {
         var form = layui.form
-            , layer = layui.layer;
+            , layer = layui.layer,
+            $ = layui.jquery;
+        $(function () {
+            $.ajax({
+                url: SYS_CONFIG_LIST_URL,
+                type: 'POST',
+                dataType: "json",
+                beforeSend: function (request) {
+                    request.setRequestHeader(GYADMIN_TOKEN, getCookie(GYADMIN_TOKEN));
+                    request.setRequestHeader(LOGIN_WAY_REMEBER_ME, getCookie(LOGIN_WAY_REMEBER_ME));
+                },
+                success: function (result) {
+                    if(result.code == 0){
+                        init(result.data);
+                    }else {
+                        layer.msg(result.msg)
+                    }
+                },
+                error: function () {
+                    layer.msg("网络错误");
+                }
+
+            });
+        })
+
+        function init(datas){
+
+            console.log(JSON.stringify(datas))
+
+            $("#sysConfig").empty();
+
+            var content = "";
+
+            for(var i = 0;i<datas.length;i++){
+
+                var data = datas[i];
+
+                content += "<div class='layui-form-item'>";
+                content += "<label class='layui-form-label required'>"+data.cfgTitle+"</label>";
+                content += "<div class='layui-input-block'>";
+                content += "<input type='text' name='"+data.cfgName.toLowerCase()+"' lay-verify='required'  placeholder='"+data.cfgDescribe+"' class='layui-input' value='"+data.cfgValue+"'>";
+                content += "<tip>"+data.cfgDescribe+"</tip>";
+                content += "</div></div>";
+            }
+
+            content += "<div class='layui-form-item'>";
+            content += "<div class='layui-input-block'>";
+            content += "<button class='layui-btn layui-btn-normal' lay-submit lay-filter='setting'>确认保存</button>";
+            content += "</div></div>";
+            $("#sysConfig").append(content);
+        }
 
         //监听提交
         form.on('submit(setting)', function (data) {
-            parent.layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
+
+            layer.confirm('确定要更新?', {icon: 3, title:'更新'}, function(index){
+                $.ajax({
+                    url: SYS_CONFIG_SUBMIT_URL,
+                    type: 'POST',
+                    dataType: "json",
+                    data:data.field,
+                    beforeSend: function (request) {
+                        request.setRequestHeader(GYADMIN_TOKEN, getCookie(GYADMIN_TOKEN));
+                        request.setRequestHeader(LOGIN_WAY_REMEBER_ME, getCookie(LOGIN_WAY_REMEBER_ME));
+                    },
+                    success: function (result) {
+                        if(result.code == 0){
+                            layer.msg("更新成功", {icon: 6,time: 2000});
+                        }else {
+                            layer.msg(result.msg, {icon: 6,time: 2000});
+                        }
+                    },
+                    error: function () {
+                        layer.msg("网络错误");
+                    }
+
+                });
             });
+
+
+
+            // parent.layer.alert(JSON.stringify(data.field), {
+            //     title: '最终的提交信息'
+            // });
             return false;
         });
 

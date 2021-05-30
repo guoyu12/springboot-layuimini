@@ -12,6 +12,10 @@ const LOGIN_OUT_URL = "/users/logout";
 const LOGIN_PAGE = "/login/page";
 //菜单栏数据请求
 const MENU_URL = "/gyMenus/list";
+//系统配置请求
+const SYS_CONFIG_LIST_URL = "/sysConfig/list";
+//系统配置请求提交
+const SYS_CONFIG_SUBMIT_URL = "/sysConfig/submit";
 
 //token
 const GYADMIN_TOKEN = "GYADMIN_TOKEN";

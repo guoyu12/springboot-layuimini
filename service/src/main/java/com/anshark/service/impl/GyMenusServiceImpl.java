@@ -5,14 +5,12 @@ import com.anshark.model.GyMenus;
 import com.anshark.response.ResultType;
 import com.anshark.service.GyMenusService;
 import com.anshark.service.GyUserPermService;
-import com.anshark.vo.Menu;
+import com.anshark.vo.MenuVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,9 +64,9 @@ public class GyMenusServiceImpl implements GyMenusService {
         return ResultType.success(getMenuList(list));
     }
 
-    public List<Menu> getMenuList(List<GyMenus> list){
-        List<Menu> menus = new ArrayList<>();
-        Menu one = new Menu();
+    public List<MenuVO> getMenuList(List<GyMenus> list){
+        List<MenuVO> menus = new ArrayList<>();
+        MenuVO one = new MenuVO();
         one.setAuthorityId(0);
         one.setAuthorityName("权限管理");
         one.setOrderNumber(1);
@@ -82,7 +80,7 @@ public class GyMenusServiceImpl implements GyMenusService {
         one.setParentId(-1);
         menus.add(one);
         list.stream().forEach(s -> {
-            Menu menu = new Menu();
+            MenuVO menu = new MenuVO();
             menu.setAuthorityId(s.getId());
             menu.setAuthorityName(s.getTitle());
             menu.setOrderNumber(s.getSort());

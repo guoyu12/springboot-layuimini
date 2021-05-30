@@ -11,7 +11,7 @@ import java.util.Date;
  * @Desc
  */
 @Data
-public class Menu {
+public class MenuVO {
 
     private Integer authorityId;
 
