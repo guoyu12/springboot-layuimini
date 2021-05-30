@@ -40,15 +40,15 @@ public class GyMenusServiceImpl implements GyMenusService {
         List<Integer> ids = getIds(userId);
 
         //首页
-        List<GyMenus> homeInfos = gyMenusDao.getMenusBy(0, 0, ids);
+        List<GyMenus> homeInfos = gyMenusDao.getMenusBy(1, 0, ids);
         map.put("homeInfo", homeInfos.size() > 0 ? homeInfos.get(0) : new GyMenus());
 
         //logo
-        List<GyMenus> menusBys = gyMenusDao.getMenusBy(0, 1, ids);
+        List<GyMenus> menusBys = gyMenusDao.getMenusBy(1, 1, ids);
         map.put("logoInfo", menusBys.size() > 0 ? menusBys.get(0) : new GyMenus());
 
         //菜单
-        List<GyMenus> menuInfo = gyMenusDao.getMenusBy(0, 2, ids);
+        List<GyMenus> menuInfo = gyMenusDao.getMenusBy(1, 2, ids);
         for (GyMenus gyMenus : menuInfo) {
             deal(gyMenus.getId(), 2, gyMenus, ids);
         }
@@ -65,6 +65,11 @@ public class GyMenusServiceImpl implements GyMenusService {
     }
 
     @Override
+    public ResultType all() {
+        return ResultType.success(gyMenusDao.list());
+    }
+
+    @Override
     public ResultType delete(Integer id) {
         if (null == id) {
             return ResultType.error("删除的ID不能为空");
@@ -72,17 +77,22 @@ public class GyMenusServiceImpl implements GyMenusService {
             List<GyMenus> list = gyMenusDao.list();
             for (GyMenus gyMenus : list) {
                 Integer delId = gyMenus.getId();
-                if (delId > 7) {
+                if (delId > 8) {
                     gyMenus.setIsDeleted(true);
                     gyMenusDao.update(gyMenus);
                 }
             }
-        } else if (id >= 1 && id <= 7) {
+        } else if (id >= 1 && id <= 8) {
             return ResultType.error("不允许删除");
         } else {
             delChildMenu(id);
         }
         return ResultType.success();
+    }
+
+    @Override
+    public GyMenus findById(Integer id) {
+        return gyMenusDao.findById(id);
     }
 
     /**
@@ -102,19 +112,19 @@ public class GyMenusServiceImpl implements GyMenusService {
 
     public List<MenuVO> getMenuList(List<GyMenus> list) {
         List<MenuVO> menus = new ArrayList<>();
-        MenuVO one = new MenuVO();
-        one.setAuthorityId(0);
-        one.setAuthorityName("权限管理");
-        one.setOrderNumber(1);
-        one.setMenuUrl(null);
-        one.setMenuIcon("layui-icon-set");
-        one.setCreateTime(LocalDateTime.now());
-        one.setAuthority(null);
-        one.setChecked(0);
-        one.setUpdateTime(LocalDateTime.now());
-        one.setIsMenu(0);
-        one.setParentId(-1);
-        menus.add(one);
+//        MenuVO one = new MenuVO();
+//        one.setAuthorityId(0);
+//        one.setAuthorityName("菜单管理");
+//        one.setOrderNumber(1);
+//        one.setMenuUrl(null);
+//        one.setMenuIcon("layui-icon-set");
+//        one.setCreateTime(LocalDateTime.now());
+//        one.setAuthority(null);
+//        one.setChecked(0);
+//        one.setUpdateTime(LocalDateTime.now());
+//        one.setIsMenu(0);
+//        one.setParentId(-1);
+//        menus.add(one);
         list.stream().forEach(s -> {
             MenuVO menu = new MenuVO();
             menu.setAuthorityId(s.getId());

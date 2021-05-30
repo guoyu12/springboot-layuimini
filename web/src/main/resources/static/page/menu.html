@@ -122,7 +122,21 @@
                     });
                 });
             } else if (layEvent === 'edit') {
-                layer.msg('修改' + data.id);
+                console.log("data.id " + data.id);
+                if(data.id == 0){
+                    layer.msg("当前不允许修改", {icon: 2,time: 2000});
+                    return;
+                }
+                layer.open({
+                    type: 2,
+                    title: '修改菜单',
+                    shadeClose: true,
+                    maxmin: true,
+                    shade: 0.8,
+                    area: ['100%', '100%'],
+                    shadeClose: false,
+                    content: '/gyMenus/editPage?id='+data.id //iframe的url
+                });
             }
         });
     });
