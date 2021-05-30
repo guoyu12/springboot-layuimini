@@ -16,6 +16,8 @@ const MENU_URL = "/gyMenus/list";
 const SYS_CONFIG_LIST_URL = "/sysConfig/list";
 //系统配置请求提交
 const SYS_CONFIG_SUBMIT_URL = "/sysConfig/submit";
+//删除菜单请求
+const MENUS_DELETE_URL = "/gyMenus/delete";
 
 //token
 const GYADMIN_TOKEN = "GYADMIN_TOKEN";

@@ -15,6 +15,6 @@ public interface GySysConfigDao {
 
     GySysConfig findByCfgName(String cfgName);
 
-    void save(GySysConfig gySysConfig);
+    void update(GySysConfig gySysConfig);
 
 }

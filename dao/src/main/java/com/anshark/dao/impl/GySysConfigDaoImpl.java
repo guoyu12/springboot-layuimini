@@ -38,7 +38,7 @@ public class GySysConfigDaoImpl implements GySysConfigDao {
     }
 
     @Override
-    public void save(GySysConfig gySysConfig) {
+    public void update(GySysConfig gySysConfig) {
         gySysConfigMapper.updateById(gySysConfig);
     }
 

@@ -40,12 +40,12 @@ public class GyMenusServiceImpl implements GyMenusService {
         List<Integer> ids = getIds(userId);
 
         //首页
-        GyMenus homeInfo = gyMenusDao.getMenusBy(0, 0, ids).get(0);
-        map.put("homeInfo", homeInfo);
+        List<GyMenus> homeInfos = gyMenusDao.getMenusBy(0, 0, ids);
+        map.put("homeInfo", homeInfos.size() > 0 ? homeInfos.get(0) : new GyMenus());
 
         //logo
-        GyMenus logoInfo = gyMenusDao.getMenusBy(0, 1, ids).get(0);
-        map.put("logoInfo", logoInfo);
+        List<GyMenus> menusBys = gyMenusDao.getMenusBy(0, 1, ids);
+        map.put("logoInfo", menusBys.size() > 0 ? menusBys.get(0) : new GyMenus());
 
         //菜单
         List<GyMenus> menuInfo = gyMenusDao.getMenusBy(0, 2, ids);
@@ -64,7 +64,43 @@ public class GyMenusServiceImpl implements GyMenusService {
         return ResultType.success(getMenuList(list));
     }
 
-    public List<MenuVO> getMenuList(List<GyMenus> list){
+    @Override
+    public ResultType delete(Integer id) {
+        if (null == id) {
+            return ResultType.error("删除的ID不能为空");
+        } else if (id == 0) {
+            List<GyMenus> list = gyMenusDao.list();
+            for (GyMenus gyMenus : list) {
+                Integer delId = gyMenus.getId();
+                if (delId > 7) {
+                    gyMenus.setIsDeleted(true);
+                    gyMenusDao.update(gyMenus);
+                }
+            }
+        } else if (id >= 1 && id <= 7) {
+            return ResultType.error("不允许删除");
+        } else {
+            delChildMenu(id);
+        }
+        return ResultType.success();
+    }
+
+    /**
+     * 删除子菜单
+     *
+     * @param id
+     */
+    void delChildMenu(Integer id) {
+        GyMenus gyMenus = gyMenusDao.findById(id);
+        gyMenus.setIsDeleted(true);
+        gyMenusDao.update(gyMenus);
+        List<GyMenus> list = gyMenusDao.findByPid(id);
+        for (GyMenus gm : list) {
+            delChildMenu(gm.getId());
+        }
+    }
+
+    public List<MenuVO> getMenuList(List<GyMenus> list) {
         List<MenuVO> menus = new ArrayList<>();
         MenuVO one = new MenuVO();
         one.setAuthorityId(0);

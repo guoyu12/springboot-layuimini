@@ -43,7 +43,7 @@ public class GySysConfigServiceImpl implements GySysConfigService {
 
             byCfgName.setCfgValue(next.getValue().toString());
 
-            gySysConfigDao.save(byCfgName);
+            gySysConfigDao.update(byCfgName);
 
         }
 

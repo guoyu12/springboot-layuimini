@@ -33,4 +33,24 @@ public interface GyMenusDao {
      */
     Integer count();
 
+    /**
+     * 更新
+     * @param gyMenus
+     */
+    void update(GyMenus gyMenus);
+
+    /**
+     * 根据ID查询
+     * @param id
+     * @return
+     */
+    GyMenus findById(Integer id);
+
+    /**
+     * 查询所有子元素
+     * @param parentId
+     * @return
+     */
+    List<GyMenus> findByPid(Integer parentId);
+
 }

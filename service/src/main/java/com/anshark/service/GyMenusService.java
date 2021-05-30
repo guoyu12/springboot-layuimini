@@ -22,4 +22,11 @@ public interface GyMenusService {
      */
     ResultType list();
 
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
+    ResultType delete(Integer id);
+
 }
