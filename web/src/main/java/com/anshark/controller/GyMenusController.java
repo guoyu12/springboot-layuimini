@@ -25,6 +25,11 @@ public class GyMenusController {
     @Autowired
     private GyMenusService gyMenusService;
 
+    @GetMapping("/menu")
+    public String menu(){
+        return "/admin/menu/menu";
+    }
+
     @ResponseBody
     @RequestMapping("/list")
     @CheckLogin(isCheck = true)
@@ -44,9 +49,16 @@ public class GyMenusController {
     public String editPage(Integer id, Model model) {
         model.addAttribute("menu", gyMenusService.findById(id));
         List<GyMenus> list = (List<GyMenus>) gyMenusService.all().getData();
-        List<GyMenus> newList = list.stream().filter(s -> s.getId() != id).collect(Collectors.toList());
+        List<GyMenus> newList = list.stream().filter(s -> !s.getId().equals(id)).collect(Collectors.toList());
         model.addAttribute("pList", newList);
         return "/admin/menu/edit";
+    }
+
+    @ResponseBody
+    @PostMapping("/update")
+    @CheckLogin(isCheck = true)
+    public ResultType update(GyMenus gyMenus) {
+        return gyMenusService.update(gyMenus);
     }
 
 }

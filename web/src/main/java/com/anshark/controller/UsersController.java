@@ -33,6 +33,11 @@ public class UsersController {
         return "/admin/index";
     }
 
+    @GetMapping("/home")
+    public String home(){
+        return "/admin/home/home";
+    }
+
     @PostMapping("/indexData")
     @ResponseBody
     @CheckLogin(isCheck = true)

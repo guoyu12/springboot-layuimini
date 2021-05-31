@@ -95,6 +95,20 @@ public class GyMenusServiceImpl implements GyMenusService {
         return gyMenusDao.findById(id);
     }
 
+    @Override
+    public ResultType update(GyMenus gyMenus) {
+        GyMenus get = gyMenusDao.findById(gyMenus.getId());
+        get.setTitle(gyMenus.getTitle());
+        get.setHref(gyMenus.getHref());
+        get.setImage(gyMenus.getImage());
+        get.setIcon(gyMenus.getIcon());
+        get.setParentId(gyMenus.getParentId());
+        get.setSort(gyMenus.getSort());
+        get.setIsMenu(gyMenus.getIsMenu());
+        gyMenusDao.update(get);
+        return ResultType.success();
+    }
+
     /**
      * 删除子菜单
      *

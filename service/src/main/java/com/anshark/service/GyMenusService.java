@@ -42,4 +42,6 @@ public interface GyMenusService {
      */
     GyMenus findById(Integer id);
 
+    ResultType update(GyMenus gyMenus);
+
 }
