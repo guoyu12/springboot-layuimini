@@ -35,4 +35,9 @@ public class GyUsersDaoImpl implements GyUsersDao {
         queryWrapper.eq("is_deleted", 0);
         return gyUsersMapper.selectOne(queryWrapper);
     }
+
+    @Override
+    public void update(GyUsers gyUsers) {
+        gyUsersMapper.updateById(gyUsers);
+    }
 }

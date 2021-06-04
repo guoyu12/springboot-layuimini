@@ -26,6 +26,12 @@ const GYADMIN_TOKEN = "GYADMIN_TOKEN";
 //是否记住我
 const LOGIN_WAY_REMEBER_ME = "GYADMIN_REMEBER_ME";
 
+//修改密码请求
+const EDIT_PASSWORD = "/users/editPassSubmit";
+
+//添加菜单请求
+const ADD_MENU_URL = "/gyMenus/addSubmit";
+
 function setCookie(cname,cvalue,exdays){
     var d = new Date();
     d.setTime(d.getTime()+(exdays*24*60*60*1000));

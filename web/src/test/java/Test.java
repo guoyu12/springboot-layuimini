@@ -1,5 +1,6 @@
 import com.anshark.model.GyUserPerm;
 import com.anshark.model.GyUsers;
+import com.anshark.utils.Md5Utils;
 
 /**
  * @Author GUOYU
@@ -10,12 +11,6 @@ public class Test {
 
     public static void main(String[] args) {
 
-        GyUsers gyUsers = new GyUsers();
-
-        Object o = new GyUserPerm();
-
-        GyUserPerm gyUserPerm = new GyUserPerm();
-
-        System.out.println(o instanceof GyUserPerm);
+        System.out.println(Md5Utils.md5("admin"));
     }
 }

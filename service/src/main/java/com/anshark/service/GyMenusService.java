@@ -44,4 +44,11 @@ public interface GyMenusService {
 
     ResultType update(GyMenus gyMenus);
 
+    /**
+     * 添加菜单
+     * @param gyMenus
+     * @return
+     */
+    ResultType add(GyMenus gyMenus);
+
 }

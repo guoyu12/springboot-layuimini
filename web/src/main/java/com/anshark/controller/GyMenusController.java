@@ -2,6 +2,7 @@ package com.anshark.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.anshark.annotation.CheckLogin;
+import com.anshark.controller.common.BaseController;
 import com.anshark.model.GyMenus;
 import com.anshark.response.ResultType;
 import com.anshark.service.GyMenusService;
@@ -20,13 +21,13 @@ import java.util.stream.Collectors;
  */
 @Controller
 @RequestMapping("/gyMenus")
-public class GyMenusController {
+public class GyMenusController extends BaseController {
 
     @Autowired
     private GyMenusService gyMenusService;
 
     @GetMapping("/menu")
-    public String menu(){
+    public String menu() {
         return "/admin/menu/menu";
     }
 
@@ -59,6 +60,19 @@ public class GyMenusController {
     @CheckLogin(isCheck = true)
     public ResultType update(GyMenus gyMenus) {
         return gyMenusService.update(gyMenus);
+    }
+
+    @GetMapping("/addPage")
+    public String addPage(Integer id, Model model) {
+        model.addAttribute("id", id);
+        return "admin/menu/add";
+    }
+
+    @ResponseBody
+    @PostMapping("/addSubmit")
+    @CheckLogin(isCheck = true)
+    public ResultType addSubmit(GyMenus gyMenus) {
+        return gyMenusService.add(gyMenus);
     }
 
 }

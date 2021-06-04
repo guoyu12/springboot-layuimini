@@ -23,4 +23,10 @@ public interface GyUsersDao {
      */
     GyUsers findById(Integer id);
 
+    /**
+     * 更新
+     * @param gyUsers
+     */
+    void update(GyUsers gyUsers);
+
 }

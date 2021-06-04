@@ -8,6 +8,7 @@ import com.anshark.service.GyUsersService;
 import com.anshark.utils.JwtUtils;
 import com.anshark.utils.Md5Utils;
 import com.anshark.utils.SessionUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -82,6 +83,38 @@ public class GyUsersServiceImpl implements GyUsersService {
                 SessionUtil.remove(request, tokenKey);
             }
         }
+        return ResultType.success();
+    }
+
+    @Override
+    public GyUsers findById(Integer id) {
+        return gyUsersDao.findById(id);
+    }
+
+    @Override
+    public ResultType editPass(Integer userId, String password, String newPassword, String retrePassword) {
+        if (StringUtils.isEmpty(password) || StringUtils.isEmpty(newPassword) || StringUtils.isEmpty(retrePassword)) {
+            return ResultType.error("密码不能为空");
+        }
+
+        if (!newPassword.equals(retrePassword)) {
+            return ResultType.error("两次密码不一致");
+        }
+
+        //检查旧密码
+        GyUsers gyUsers = gyUsersDao.findById(userId);
+        if (null == gyUsers) {
+            return ResultType.error("用户不存在");
+        }
+
+        if (!Md5Utils.md5(password).equals(gyUsers.getPassword())) {
+            return ResultType.error("密码错误");
+        }
+
+        gyUsers.setPassword(Md5Utils.md5(newPassword));
+
+        gyUsersDao.update(gyUsers);
+
         return ResultType.success();
     }
 }

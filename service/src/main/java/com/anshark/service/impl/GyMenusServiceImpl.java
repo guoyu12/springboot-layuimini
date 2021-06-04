@@ -109,6 +109,12 @@ public class GyMenusServiceImpl implements GyMenusService {
         return ResultType.success();
     }
 
+    @Override
+    public ResultType add(GyMenus gyMenus) {
+        gyMenusDao.save(gyMenus);
+        return ResultType.success();
+    }
+
     /**
      * 删除子菜单
      *
@@ -126,19 +132,6 @@ public class GyMenusServiceImpl implements GyMenusService {
 
     public List<MenuVO> getMenuList(List<GyMenus> list) {
         List<MenuVO> menus = new ArrayList<>();
-//        MenuVO one = new MenuVO();
-//        one.setAuthorityId(0);
-//        one.setAuthorityName("菜单管理");
-//        one.setOrderNumber(1);
-//        one.setMenuUrl(null);
-//        one.setMenuIcon("layui-icon-set");
-//        one.setCreateTime(LocalDateTime.now());
-//        one.setAuthority(null);
-//        one.setChecked(0);
-//        one.setUpdateTime(LocalDateTime.now());
-//        one.setIsMenu(0);
-//        one.setParentId(-1);
-//        menus.add(one);
         list.stream().forEach(s -> {
             MenuVO menu = new MenuVO();
             menu.setAuthorityId(s.getId());

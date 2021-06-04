@@ -69,4 +69,9 @@ public class GyMenusDaoImpl implements GyMenusDao {
         return gyMenusMapper.selectList(queryWrapper);
     }
 
+    @Override
+    public void save(GyMenus gyMenus) {
+        gyMenusMapper.insert(gyMenus);
+    }
+
 }

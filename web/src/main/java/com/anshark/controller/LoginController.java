@@ -1,5 +1,6 @@
 package com.anshark.controller;
 
+import com.anshark.controller.common.BaseController;
 import com.anshark.response.ResultType;
 import com.anshark.service.GyUsersService;
 import com.anshark.utils.VerifyCodeUtil;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/login")
 @Slf4j
-public class LoginController {
+public class LoginController extends BaseController {
 
     @Autowired
     private GyUsersService gyUsersService;

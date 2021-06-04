@@ -1,5 +1,6 @@
 package com.anshark.service;
 
+import com.anshark.model.GyUsers;
 import com.anshark.response.ResultType;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,5 +32,22 @@ public interface GyUsersService {
      * @return
      */
     ResultType logout(HttpServletRequest request, Integer userId);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    GyUsers findById(Integer id);
+
+    /**
+     * 修改密码
+     * @param userId
+     * @param password
+     * @param newPassword
+     * @param retrePassword
+     * @return
+     */
+    ResultType editPass(Integer userId,String password, String newPassword,String retrePassword);
 
 }

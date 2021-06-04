@@ -31,8 +31,17 @@
 </div>
 <!-- 操作列 -->
 <script type="text/html" id="auth-state">
+    {{# if(d.id == 1 || d.id == 2 || d.id == 3){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs layui-btn-disabled">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled">删除</a>
+    <a class="layui-btn layui-btn-green layui-btn-xs layui-btn-disabled">添加</a>
+    {{# }else{ }}
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-green layui-btn-xs" lay-event="add">添加</a>
+    {{# } }}
+
+
 </script>
 
 <script src="/static/js/commons.js" charset="UTF-8"></script>
@@ -57,9 +66,8 @@
             page: false,
             cols: [[
                 {type: 'numbers'},
-                {field: 'authorityName', minWidth: 200, title: '权限名称'},
-                {field: 'authority', title: '权限标识'},
-                {field: 'menuUrl', title: '菜单url'},
+                {field: 'authorityName', minWidth: 100, title: '菜单名称'},
+                {field: 'menuUrl', title: '菜单url',minWidth: 100},
                 {field: 'orderNumber', width: 80, align: 'center', title: '排序号'},
                 {
                     field: 'isMenu', width: 80, align: 'center', templet: function (d) {
@@ -73,7 +81,7 @@
                         }
                     }, title: '类型'
                 },
-                {templet: '#auth-state', width: 120, align: 'center', title: '操作'}
+                {templet: '#auth-state', width: 200, align: 'center', title: '操作'}
             ]],
             done: function () {
                 layer.closeAll('loading');
@@ -122,11 +130,6 @@
                     });
                 });
             } else if (layEvent === 'edit') {
-                console.log("data.id " + data.id);
-                if(data.id == 0){
-                    layer.msg("当前不允许修改", {icon: 2,time: 2000});
-                    return;
-                }
                 layer.open({
                     type: 2,
                     title: '修改菜单',
@@ -136,6 +139,17 @@
                     area: ['100%', '100%'],
                     shadeClose: false,
                     content: '/gyMenus/editPage?id='+data.id //iframe的url
+                });
+            } else if (layEvent === 'add') {
+                layer.open({
+                    type: 2,
+                    title: '添加',
+                    shadeClose: true,
+                    maxmin: true,
+                    shade: 0.8,
+                    area: ['100%', '100%'],
+                    shadeClose: false,
+                    content: '/gyMenus/addPage?id='+data.id //iframe的url
                 });
             }
         });

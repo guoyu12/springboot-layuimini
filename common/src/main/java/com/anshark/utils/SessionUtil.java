@@ -3,6 +3,7 @@ package com.anshark.utils;
 import com.anshark.common.Constant;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @Author GUOYU
@@ -14,6 +15,8 @@ public class SessionUtil {
 
     public static final String REMEMBER_ME_TRUE = "true";
     public static final String REMEMBER_ME_FALSE = "false";
+
+    public static final String USER_ID = "USER_ID";
 
     public static String getHeader(HttpServletRequest request, String name) {
         return request.getHeader(name);
@@ -28,7 +31,11 @@ public class SessionUtil {
     }
 
     public static void setSession(HttpServletRequest request, String name, Object value) {
-        request.getSession().setAttribute(name, value);
+        HttpSession session = request.getSession();
+        Integer attribute = (Integer) session.getAttribute(name);
+        if (null == attribute) {
+            session.setAttribute(name, value);
+        }
     }
 
     public static boolean getIsRemeberMe(HttpServletRequest request) {

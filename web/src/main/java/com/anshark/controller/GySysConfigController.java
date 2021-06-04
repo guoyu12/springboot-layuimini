@@ -1,6 +1,7 @@
 package com.anshark.controller;
 
 import com.anshark.annotation.CheckLogin;
+import com.anshark.controller.common.BaseController;
 import com.anshark.po.SysConfigPO;
 import com.anshark.response.ResultType;
 import com.anshark.service.GySysConfigService;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 @RequestMapping("/sysConfig")
-public class GySysConfigController {
+public class GySysConfigController extends BaseController {
 
     @Autowired
     private GySysConfigService gySysConfigService;

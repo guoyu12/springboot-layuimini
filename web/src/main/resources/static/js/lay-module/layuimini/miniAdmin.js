@@ -121,7 +121,7 @@ layui.define(["jquery", "miniMenu", "element","miniTab", "miniTheme"], function 
          * @param clearUrl
          */
         renderClear: function (clearUrl) {
-            $('.layuimini-clear').attr('data-href',clearUrl);
+           $('.layuimini-clear').attr('data-href',"");
         },
 
         /**

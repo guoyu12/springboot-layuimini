@@ -53,4 +53,10 @@ public interface GyMenusDao {
      */
     List<GyMenus> findByPid(Integer parentId);
 
+    /**
+     * 保存
+     * @param gyMenus
+     */
+    void save(GyMenus gyMenus);
+
 }

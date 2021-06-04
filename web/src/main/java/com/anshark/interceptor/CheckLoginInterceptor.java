@@ -72,6 +72,8 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
 
             checkUserId(userId);
 
+            SessionUtil.setSession(request, SessionUtil.USER_ID, userId);
+
             UserUtils.set(userId);
 
         }
