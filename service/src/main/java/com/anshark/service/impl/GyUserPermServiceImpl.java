@@ -41,4 +41,13 @@ public class GyUserPermServiceImpl implements GyUserPermService {
         return listString.stream().map(s -> Integer.parseInt(s)).collect(Collectors.toList());
     }
 
+    @Override
+    public void del(Integer userId) {
+        GyUserPerm gyUserPerm = gyUserPermDao.findByUserId(userId);
+        if (null != gyUserPerm) {
+            gyUserPerm.setIsDeleted(true);
+            gyUserPermDao.update(gyUserPerm);
+        }
+    }
+
 }

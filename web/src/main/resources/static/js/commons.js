@@ -32,6 +32,16 @@ const EDIT_PASSWORD = "/users/editPassSubmit";
 //添加菜单请求
 const ADD_MENU_URL = "/gyMenus/addSubmit";
 
+//用户信息
+const USER_LIST_URL = "/users/list";
+//用户设置更新
+const USERSETTING_SUBMIT_URL = "/users/settingSubmit";
+//用户删除
+const USER_DEL_URL = "/users/del";
+
+//编辑用户
+const USER_EDIT_URL = "/users/editSubmit";
+
 function setCookie(cname,cvalue,exdays){
     var d = new Date();
     d.setTime(d.getTime()+(exdays*24*60*60*1000));

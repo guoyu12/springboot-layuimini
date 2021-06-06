@@ -4,6 +4,8 @@ import com.anshark.dao.GyUsersDao;
 import com.anshark.mapper.GyUsersMapper;
 import com.anshark.model.GyUsers;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -39,5 +41,13 @@ public class GyUsersDaoImpl implements GyUsersDao {
     @Override
     public void update(GyUsers gyUsers) {
         gyUsersMapper.updateById(gyUsers);
+    }
+
+    @Override
+    public IPage<GyUsers> page(Integer page, Integer limit) {
+        QueryWrapper<GyUsers> queryWrapper = new QueryWrapper<>();
+        Page<GyUsers> p = new Page<>(page, limit);
+        IPage<GyUsers> iPage = gyUsersMapper.selectPage(p, queryWrapper);
+        return iPage;
     }
 }

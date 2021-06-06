@@ -2,6 +2,7 @@ package com.anshark.controller;
 
 import com.anshark.annotation.CheckLogin;
 import com.anshark.controller.common.BaseController;
+import com.anshark.model.GyUsers;
 import com.anshark.response.ResultType;
 import com.anshark.service.GyMenusService;
 import com.anshark.service.GyUsersService;
@@ -60,6 +61,14 @@ public class UsersController extends BaseController {
         return "/admin/user/userSetting";
     }
 
+    @PostMapping("/settingSubmit")
+    @ResponseBody
+    @CheckLogin(isCheck = true)
+    public ResultType settingSubmit(GyUsers gyUsers, HttpServletRequest request) {
+        gyUsers.setId(getUserId(request));
+        return gyUsersService.save(gyUsers);
+    }
+
 
     @GetMapping("/editPass")
     public String editPass() {
@@ -76,5 +85,37 @@ public class UsersController extends BaseController {
     @ResponseBody
     public ResultType resultType(String password, String newPassword, String retrePassword, HttpServletRequest request) {
         return gyUsersService.editPass(getUserId(request), password, newPassword, retrePassword);
+    }
+
+    @RequestMapping("/list")
+    @ResponseBody
+    public ResultType list(HttpServletRequest request) {
+        return gyUsersService.page(page(request), pageSize(request));
+    }
+
+    @GetMapping("/userPage")
+    public String userPage() {
+        return "/admin/user/userList";
+    }
+
+    @RequestMapping("/del")
+    @ResponseBody
+    @CheckLogin(isCheck = true)
+    public ResultType del(Integer id) {
+        return gyUsersService.del(id);
+    }
+
+    @RequestMapping("/editPage")
+    public String editPage(Integer id, Model model) {
+        GyUsers user = gyUsersService.findById(id);
+        model.addAttribute("user", user);
+        return "/admin/user/edit";
+    }
+
+    @RequestMapping("/editSubmit")
+    @ResponseBody
+    @CheckLogin(isCheck = true)
+    public ResultType editSubmit(GyUsers gyUsers) {
+        return gyUsersService.edit(gyUsers);
     }
 }

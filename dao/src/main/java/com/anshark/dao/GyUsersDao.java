@@ -1,6 +1,7 @@
 package com.anshark.dao;
 
 import com.anshark.model.GyUsers;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 /**
  * @Author GUOYU
@@ -28,5 +29,13 @@ public interface GyUsersDao {
      * @param gyUsers
      */
     void update(GyUsers gyUsers);
+
+    /**
+     * 分页
+     * @param page
+     * @param limit
+     * @return
+     */
+    IPage<GyUsers> page(Integer page,Integer limit);
 
 }

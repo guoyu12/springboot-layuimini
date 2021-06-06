@@ -34,7 +34,6 @@ public interface GyUsersService {
     ResultType logout(HttpServletRequest request, Integer userId);
 
     /**
-     *
      * @param id
      * @return
      */
@@ -42,12 +41,47 @@ public interface GyUsersService {
 
     /**
      * 修改密码
+     *
      * @param userId
      * @param password
      * @param newPassword
      * @param retrePassword
      * @return
      */
-    ResultType editPass(Integer userId,String password, String newPassword,String retrePassword);
+    ResultType editPass(Integer userId, String password, String newPassword, String retrePassword);
+
+    /**
+     * 分页数据
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    ResultType page(Integer page, Integer limit);
+
+    /**
+     * 保存
+     *
+     * @param gyUsers
+     * @return
+     */
+    ResultType save(GyUsers gyUsers);
+
+    /**
+     * 删除
+     *
+     * @param id
+     * @return
+     */
+    ResultType del(Integer id);
+
+
+    /**
+     * 编辑
+     *
+     * @param gyUsers
+     * @return
+     */
+    ResultType edit(GyUsers gyUsers);
 
 }

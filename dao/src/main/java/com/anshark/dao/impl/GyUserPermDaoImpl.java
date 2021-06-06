@@ -25,4 +25,9 @@ public class GyUserPermDaoImpl implements GyUserPermDao {
         queryWrapper.eq("is_deleted", 0);
         return gyUserPermMapper.selectOne(queryWrapper);
     }
+
+    @Override
+    public void update(GyUserPerm gyUserPerm) {
+        gyUserPermMapper.updateById(gyUserPerm);
+    }
 }

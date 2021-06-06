@@ -17,4 +17,11 @@ public interface GyUserPermDao {
      */
     GyUserPerm findByUserId(Integer userId);
 
+    /**
+     * 更新
+     * @param gyUserPerm
+     * @return
+     */
+    void update(GyUserPerm gyUserPerm);
+
 }

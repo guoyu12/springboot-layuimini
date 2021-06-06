@@ -16,4 +16,10 @@ public interface GyUserPermService {
      */
     List<Integer> getPerms(Integer userId);
 
+    /**
+     * 删除ID
+     * @param userId
+     */
+    void del(Integer userId);
+
 }

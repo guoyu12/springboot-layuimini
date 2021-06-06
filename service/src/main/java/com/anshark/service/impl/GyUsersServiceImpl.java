@@ -4,10 +4,12 @@ import com.anshark.common.Constant;
 import com.anshark.dao.GyUsersDao;
 import com.anshark.model.GyUsers;
 import com.anshark.response.ResultType;
+import com.anshark.service.GyUserPermService;
 import com.anshark.service.GyUsersService;
 import com.anshark.utils.JwtUtils;
 import com.anshark.utils.Md5Utils;
 import com.anshark.utils.SessionUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -29,6 +31,8 @@ public class GyUsersServiceImpl implements GyUsersService {
     private GyUsersDao gyUsersDao;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private GyUserPermService gyUserPermService;
 
 
     @Override
@@ -114,6 +118,51 @@ public class GyUsersServiceImpl implements GyUsersService {
         gyUsers.setPassword(Md5Utils.md5(newPassword));
 
         gyUsersDao.update(gyUsers);
+
+        return ResultType.success();
+    }
+
+    @Override
+    public ResultType page(Integer page, Integer limit) {
+        IPage<GyUsers> ipage = gyUsersDao.page(page, limit);
+        return ResultType.success(ipage.getRecords(), (int) ipage.getTotal());
+    }
+
+    @Override
+    public ResultType save(GyUsers gyUsers) {
+        gyUsersDao.update(gyUsers);
+        return ResultType.success();
+    }
+
+    @Override
+    public ResultType del(Integer id) {
+        GyUsers gyUsers = gyUsersDao.findById(id);
+        if (null == gyUsers) {
+            return ResultType.error("用户不存在");
+        }
+        gyUsers.setIsDeleted(true);
+        gyUsersDao.update(gyUsers);
+        //删除权限
+        gyUserPermService.del(id);
+        return ResultType.success();
+    }
+
+    @Override
+    public ResultType edit(GyUsers gyUsers) {
+        Integer id = gyUsers.getId();
+        if (null == id) {
+            return ResultType.error("用户id不存在");
+        }
+        GyUsers user = gyUsersDao.findById(id);
+        if (null == user) {
+            return ResultType.error("用户不存在");
+        }
+
+        user.setEmail(gyUsers.getEmail());
+        user.setHeadPortrait(gyUsers.getHeadPortrait());
+        user.setPhone(gyUsers.getPhone());
+
+        gyUsersDao.update(user);
 
         return ResultType.success();
     }
