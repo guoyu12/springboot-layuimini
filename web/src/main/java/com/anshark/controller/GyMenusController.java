@@ -1,6 +1,5 @@
 package com.anshark.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.anshark.annotation.CheckLogin;
 import com.anshark.controller.common.BaseController;
 import com.anshark.model.GyMenus;
@@ -35,7 +34,6 @@ public class GyMenusController extends BaseController {
     @RequestMapping("/list")
     @CheckLogin(isCheck = true)
     public ResultType list() {
-        System.out.println(JSONObject.toJSONString(gyMenusService.list()));
         return gyMenusService.list();
     }
 
@@ -74,5 +72,6 @@ public class GyMenusController extends BaseController {
     public ResultType addSubmit(GyMenus gyMenus) {
         return gyMenusService.add(gyMenus);
     }
+
 
 }

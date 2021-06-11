@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>layuimini-iframe版 v2 - 基于Layui的后台管理系统前端模板</title>
+    <title>springboot - layuimini-iframe版 v2 - 基于Layui的后台管理系统前端模板</title>
     <meta name="keywords" content="layuimini,layui,layui模板,layui后台,后台模板,admin,admin模板,layui mini">
     <meta name="description"
           content="layuimini基于layui的轻量级前端后台管理框架，最简洁、易用的后台框架模板，面向所有层次的前后端程序,只需提供一个接口就直接初始化整个框架，无需复杂操作。">
@@ -61,7 +61,7 @@
                     <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
                 </li>
                 <li class="layui-nav-item layuimini-setting">
-                    <a href="javascript:;">admin</a>
+                    <a href="javascript:;">${user.username}</a>
                     <dl class="layui-nav-child">
                         <dd>
                             <a href="javascript:;" layuimini-content-href="/users/setting" data-title="基本资料"
@@ -163,22 +163,21 @@
         });
 
         $('.login-out').on("click", function () {
-            layer.confirm('确定要退出?', {icon: 3, title:'退出'}, function(index){
+            layer.confirm('确定要退出?', {icon: 3, title: '退出'}, function (index) {
                 $.ajax({
                     url: LOGIN_OUT_URL,
                     type: 'POST',
                     dataType: "json",
                     beforeSend: function (request) {
                         request.setRequestHeader(GYADMIN_TOKEN, getCookie(GYADMIN_TOKEN));
-                        console.log(getCookie(LOGIN_WAY_REMEBER_ME))
                         request.setRequestHeader(LOGIN_WAY_REMEBER_ME, getCookie(LOGIN_WAY_REMEBER_ME));
                     },
                     success: function (result) {
-                        if(result.code == 0){
+                        if (result.code == 0) {
                             delCookie(GYADMIN_TOKEN);
                             delCookie(LOGIN_WAY_REMEBER_ME);
                             window.location.href = LOGIN_PAGE;
-                        }else {
+                        } else {
                             layer.msg(result.msg)
                         }
                     },

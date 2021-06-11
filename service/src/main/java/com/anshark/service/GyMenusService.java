@@ -51,4 +51,10 @@ public interface GyMenusService {
      */
     ResultType add(GyMenus gyMenus);
 
+    /**
+     * 用户菜单
+     * @return
+     */
+    ResultType userTree();
+
 }

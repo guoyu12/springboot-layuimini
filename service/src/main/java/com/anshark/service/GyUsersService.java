@@ -55,9 +55,12 @@ public interface GyUsersService {
      *
      * @param page
      * @param limit
+     * @param username
+     * @param phone
+     * @param email
      * @return
      */
-    ResultType page(Integer page, Integer limit);
+    ResultType page(Integer page, Integer limit, String username, String phone, String email);
 
     /**
      * 保存
@@ -83,5 +86,15 @@ public interface GyUsersService {
      * @return
      */
     ResultType edit(GyUsers gyUsers);
+
+    /**
+     * 新增用户
+     *
+     * @param gyUsers
+     * @param roles
+     * @param perms
+     * @return
+     */
+    ResultType addSubmit(GyUsers gyUsers, String roles, String perms);
 
 }

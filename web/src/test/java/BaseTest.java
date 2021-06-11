@@ -2,6 +2,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.anshark.GyadminApplication;
 import com.anshark.dao.GyMenusDao;
 import com.anshark.model.GyMenus;
+import com.anshark.utils.Md5Utils;
 import com.anshark.utils.SpringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,9 +27,7 @@ public class BaseTest {
 
     @Test
     public void test1(){
-        GyMenusDao bean = SpringUtils.getBean(GyMenusDao.class);
-        List<GyMenus> menusBy = bean.getMenusBy(0, 0, Arrays.asList(1, 2));
-        System.out.println(menusBy);
+        System.out.println(Md5Utils.md5("test"));
     }
 
     @Test

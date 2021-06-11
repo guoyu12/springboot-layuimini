@@ -64,8 +64,6 @@
 
         function init(datas){
 
-            console.log(JSON.stringify(datas))
-
             $("#sysConfig").empty();
 
             var content = "";

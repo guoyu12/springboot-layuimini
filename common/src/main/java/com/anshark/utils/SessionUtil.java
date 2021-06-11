@@ -32,10 +32,7 @@ public class SessionUtil {
 
     public static void setSession(HttpServletRequest request, String name, Object value) {
         HttpSession session = request.getSession();
-        Integer attribute = (Integer) session.getAttribute(name);
-        if (null == attribute) {
-            session.setAttribute(name, value);
-        }
+        session.setAttribute(name, value);
     }
 
     public static boolean getIsRemeberMe(HttpServletRequest request) {

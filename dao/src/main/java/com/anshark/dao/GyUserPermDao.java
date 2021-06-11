@@ -24,4 +24,10 @@ public interface GyUserPermDao {
      */
     void update(GyUserPerm gyUserPerm);
 
+    /**
+     * 添加保存
+     * @param gyUserPerm
+     */
+    void save(GyUserPerm gyUserPerm);
+
 }

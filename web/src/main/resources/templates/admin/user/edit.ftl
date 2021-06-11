@@ -60,16 +60,32 @@
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            var index = layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
-            }, function () {
+            layer.confirm('确定要更新?', {icon: 3, title:'更新'}, function(index){
+                $.ajax({
+                    url: USER_EDIT_URL,
+                    type: 'POST',
+                    dataType: "json",
+                    data: data.field,
+                    beforeSend: function (request) {
+                        request.setRequestHeader(GYADMIN_TOKEN, getCookie(GYADMIN_TOKEN));
+                        request.setRequestHeader(LOGIN_WAY_REMEBER_ME, getCookie(LOGIN_WAY_REMEBER_ME));
+                    },
+                    success: function (result) {
+                        if(result.code == 0){
+                            layer.msg("更新成功", {icon: 6,time: 2000},function () {
+                                layer.close(index);
+                                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(iframeIndex);
+                            });
+                        }else {
+                            layer.msg(result.msg);
+                        }
+                    },
+                    error:function () {
+                        layer.msg("网络错误");
+                    }
 
-                // 关闭弹出层
-                layer.close(index);
-
-                var iframeIndex = parent.layer.getFrameIndex(window.name);
-                parent.layer.close(iframeIndex);
-
+                });
             });
 
             return false;

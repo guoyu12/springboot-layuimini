@@ -68,7 +68,6 @@
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            console.log(data.field)
             layer.confirm('确定要更新?', {icon: 3, title:'更新'}, function(index){
                 $.ajax({
                     url: USERSETTING_SUBMIT_URL,

@@ -6,6 +6,7 @@ import com.anshark.model.GyUsers;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -44,10 +45,24 @@ public class GyUsersDaoImpl implements GyUsersDao {
     }
 
     @Override
-    public IPage<GyUsers> page(Integer page, Integer limit) {
+    public IPage<GyUsers> page(Integer page, Integer limit, String username, String phone, String email) {
         QueryWrapper<GyUsers> queryWrapper = new QueryWrapper<>();
+        if (StringUtils.isNotEmpty(username)) {
+            queryWrapper.eq("username", username);
+        }
+        if (StringUtils.isNotEmpty(phone)) {
+            queryWrapper.eq("phone", phone);
+        }
+        if (StringUtils.isNotEmpty(email)) {
+            queryWrapper.eq("email", email);
+        }
         Page<GyUsers> p = new Page<>(page, limit);
         IPage<GyUsers> iPage = gyUsersMapper.selectPage(p, queryWrapper);
         return iPage;
+    }
+
+    @Override
+    public void save(GyUsers gyUsers) {
+        gyUsersMapper.insert(gyUsers);
     }
 }

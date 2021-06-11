@@ -1,11 +1,14 @@
 package com.anshark.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.anshark.annotation.CheckLogin;
 import com.anshark.controller.common.BaseController;
 import com.anshark.model.GyUsers;
 import com.anshark.response.ResultType;
 import com.anshark.service.GyMenusService;
+import com.anshark.service.GyRolesService;
 import com.anshark.service.GyUsersService;
+import com.anshark.vo.UserTreeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Author GUOYU
@@ -29,9 +33,12 @@ public class UsersController extends BaseController {
     private GyMenusService gyMenusService;
     @Autowired
     private GyUsersService gyUsersService;
+    @Autowired
+    private GyRolesService gyRolesService;
 
     @GetMapping("/index")
-    public String index() {
+    public String index(HttpServletRequest request, Model model) {
+        model.addAttribute("user", gyUsersService.findById(getUserId(request)));
         return "/admin/index";
     }
 
@@ -89,8 +96,8 @@ public class UsersController extends BaseController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public ResultType list(HttpServletRequest request) {
-        return gyUsersService.page(page(request), pageSize(request));
+    public ResultType list(HttpServletRequest request, String username, String phone, String email) {
+        return gyUsersService.page(page(request), pageSize(request), username, phone, email);
     }
 
     @GetMapping("/userPage")
@@ -117,5 +124,20 @@ public class UsersController extends BaseController {
     @CheckLogin(isCheck = true)
     public ResultType editSubmit(GyUsers gyUsers) {
         return gyUsersService.edit(gyUsers);
+    }
+
+    @RequestMapping("/add")
+    public String add(Model model) {
+        List<UserTreeVO> data = (List<UserTreeVO>) gyMenusService.userTree().getData();
+        model.addAttribute("data", JSONObject.toJSONString(data));
+        model.addAttribute("roles", gyRolesService.roles().getData());
+        return "/admin/user/add";
+    }
+
+    @RequestMapping("/addSubmit")
+    @ResponseBody
+    @CheckLogin(isCheck = true)
+    public ResultType addSubmit(GyUsers gyUsers, String roles, String perms) {
+        return gyUsersService.addSubmit(gyUsers, roles, perms);
     }
 }

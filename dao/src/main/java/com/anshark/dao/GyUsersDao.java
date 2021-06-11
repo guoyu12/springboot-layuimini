@@ -36,6 +36,12 @@ public interface GyUsersDao {
      * @param limit
      * @return
      */
-    IPage<GyUsers> page(Integer page,Integer limit);
+    IPage<GyUsers> page(Integer page,Integer limit, String username, String phone, String email);
+
+    /**
+     * 添加
+     * @param gyUsers
+     */
+    void save(GyUsers gyUsers);
 
 }

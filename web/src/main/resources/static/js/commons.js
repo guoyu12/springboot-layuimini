@@ -42,6 +42,9 @@ const USER_DEL_URL = "/users/del";
 //编辑用户
 const USER_EDIT_URL = "/users/editSubmit";
 
+//新增用户
+const USER_ADD_URL = "/users/addSubmit";
+
 function setCookie(cname,cvalue,exdays){
     var d = new Date();
     d.setTime(d.getTime()+(exdays*24*60*60*1000));

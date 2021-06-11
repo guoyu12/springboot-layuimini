@@ -24,9 +24,21 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">用户姓名</label>
+                            <label class="layui-form-label">用户</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="username" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">手机</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="phone" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">邮箱</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="email" autocomplete="off" class="layui-input">
                             </div>
                         </div>
 <#--                        <div class="layui-inline">-->
@@ -58,7 +70,6 @@
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
                 <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
-                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
             </div>
         </script>
 
@@ -77,9 +88,10 @@
     layui.use(['form', 'table'], function () {
         var $ = layui.jquery,
             form = layui.form,
-            table = layui.table;
+            table = layui.table,
+            t;
 
-        table.render({
+        t = {
             elem: '#currentTableId',
             url: USER_LIST_URL,
             toolbar: '#toolbarDemo',
@@ -102,25 +114,15 @@
             limit: 15,
             page: true,
             skin: 'line'
-        });
+        }
+
+        table.render(t);
 
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
-            var result = JSON.stringify(data.field);
-            layer.alert(result, {
-                title: '最终的搜索信息'
-            });
 
-            //执行搜索重载
-            table.reload('currentTableId', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    searchParams: result
-                }
-            }, 'data');
-
+            t.where = data.field;
+            table.reload('currentTableId', t);
             return false;
         });
 
@@ -136,21 +138,16 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '../page/table/add.html',
+                    content: '/users/add',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
-            } else if (obj.event === 'delete') {  // 监听删除操作
-                var checkStatus = table.checkStatus('currentTableId')
-                    , data = checkStatus.data;
-                layer.alert(JSON.stringify(data));
             }
         });
 
         //监听表格复选框选择
         table.on('checkbox(currentTableFilter)', function (obj) {
-            console.log(obj)
         });
 
         table.on('tool(currentTableFilter)', function (obj) {

@@ -1,5 +1,7 @@
 package com.anshark.service;
 
+import com.anshark.model.GyUserPerm;
+
 import java.util.List;
 
 /**
@@ -21,5 +23,6 @@ public interface GyUserPermService {
      * @param userId
      */
     void del(Integer userId);
+
 
 }

@@ -1,12 +1,17 @@
 package com.anshark.service.impl;
 
 import com.anshark.dao.GyMenusDao;
+import com.anshark.dao.GyUsersDao;
+import com.anshark.exception.SysException;
 import com.anshark.model.GyMenus;
+import com.anshark.model.GyUsers;
 import com.anshark.response.ResultType;
 import com.anshark.service.GyMenusService;
 import com.anshark.service.GyUserPermService;
 import com.anshark.vo.MenuVO;
+import com.anshark.vo.UserTreeVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +34,19 @@ public class GyMenusServiceImpl implements GyMenusService {
     private GyMenusDao gyMenusDao;
     @Autowired
     private GyUserPermService gyUserPermService;
+    @Autowired
+    private GyUsersDao gyUsersDao;
 
     @Override
     public ResultType getMenus(Integer userId) {
 
         log.info("【GyMenusServiceImpl】【getMenus】 userId -- {}", userId);
+
+        GyUsers user = gyUsersDao.findById(userId);
+        if (null == user) {
+            throw new SysException(ResultType.error("用户不存在" + userId));
+        }
+
 
         Map<String, Object> map = new HashMap<>(3);
 
@@ -45,7 +58,15 @@ public class GyMenusServiceImpl implements GyMenusService {
 
         //logo
         List<GyMenus> menusBys = gyMenusDao.getMenusBy(1, 1, ids);
-        map.put("logoInfo", menusBys.size() > 0 ? menusBys.get(0) : new GyMenus());
+        GyMenus g = new GyMenus();
+        if (menusBys.size() > 0) {
+            g = menusBys.get(0);
+        }
+        String headPortrait = user.getHeadPortrait();
+        if (StringUtils.isNotEmpty(headPortrait)) {
+            g.setImage(headPortrait);
+        }
+        map.put("logoInfo", menusBys.size() > 0 ? g : g);
 
         //菜单
         List<GyMenus> menuInfo = gyMenusDao.getMenusBy(1, 2, ids);
@@ -113,6 +134,41 @@ public class GyMenusServiceImpl implements GyMenusService {
     public ResultType add(GyMenus gyMenus) {
         gyMenusDao.save(gyMenus);
         return ResultType.success();
+    }
+
+    @Override
+    public ResultType userTree() {
+        List<GyMenus> list = gyMenusDao.findByPid(-1);
+        List<UserTreeVO> treeVOList = menusToTree(list);
+        loadMenu(treeVOList);
+        return ResultType.success(treeVOList);
+    }
+
+    void loadMenu(List<UserTreeVO> treeVOList) {
+        for (int i = 0; i < treeVOList.size(); i++) {
+            UserTreeVO userTreeVO = treeVOList.get(i);
+            List<GyMenus> list = gyMenusDao.findByPid(userTreeVO.getId());
+            //转换
+            List<UserTreeVO> menusToTree = menusToTree(list);
+            userTreeVO.setChildren(menusToTree);
+            loadMenu(menusToTree);
+        }
+    }
+
+    List<UserTreeVO> menusToTree(List<GyMenus> menus) {
+
+        List<UserTreeVO> menusToTree = new ArrayList<>();
+
+        menus.stream().forEach(s -> {
+            UserTreeVO treeVO = new UserTreeVO();
+            treeVO.setId(s.getId());
+            treeVO.setField("name");
+            treeVO.setTitle(s.getTitle());
+            treeVO.setChecked(false);
+            treeVO.setSpread(false);
+            menusToTree.add(treeVO);
+        });
+        return menusToTree;
     }
 
     /**

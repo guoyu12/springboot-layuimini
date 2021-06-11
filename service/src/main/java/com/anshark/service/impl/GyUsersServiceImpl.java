@@ -1,7 +1,12 @@
 package com.anshark.service.impl;
 
 import com.anshark.common.Constant;
+import com.anshark.dao.GyUserPermDao;
+import com.anshark.dao.GyUserRoleDao;
 import com.anshark.dao.GyUsersDao;
+import com.anshark.exception.SysException;
+import com.anshark.model.GyUserPerm;
+import com.anshark.model.GyUserRole;
 import com.anshark.model.GyUsers;
 import com.anshark.response.ResultType;
 import com.anshark.service.GyUserPermService;
@@ -33,7 +38,10 @@ public class GyUsersServiceImpl implements GyUsersService {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private GyUserPermService gyUserPermService;
-
+    @Autowired
+    private GyUserPermDao gyUserPermDao;
+    @Autowired
+    private GyUserRoleDao gyUserRoleDao;
 
     @Override
     public ResultType login(String username, String password, String captcha, Boolean rememberMe, HttpServletRequest request) {
@@ -66,10 +74,9 @@ public class GyUsersServiceImpl implements GyUsersService {
 
         if (rememberMe) {
             stringRedisTemplate.opsForValue().set(tokenKey, token, 7, TimeUnit.DAYS);
-        } else {
-            SessionUtil.setSession(request, tokenKey, token);
         }
-
+        SessionUtil.setSession(request, tokenKey, token);
+        SessionUtil.setSession(request, SessionUtil.USER_ID, gyUsers.getId());
         return ResultType.success(token);
     }
 
@@ -123,8 +130,8 @@ public class GyUsersServiceImpl implements GyUsersService {
     }
 
     @Override
-    public ResultType page(Integer page, Integer limit) {
-        IPage<GyUsers> ipage = gyUsersDao.page(page, limit);
+    public ResultType page(Integer page, Integer limit, String username, String phone, String email) {
+        IPage<GyUsers> ipage = gyUsersDao.page(page, limit, username, phone, email);
         return ResultType.success(ipage.getRecords(), (int) ipage.getTotal());
     }
 
@@ -164,6 +171,30 @@ public class GyUsersServiceImpl implements GyUsersService {
 
         gyUsersDao.update(user);
 
+        return ResultType.success();
+    }
+
+    @Override
+    public ResultType addSubmit(GyUsers gyUsers, String roles, String perms) {
+        String username = gyUsers.getUsername();
+        GyUsers byUsername = gyUsersDao.findByUsername(username);
+        if (null != byUsername) {
+            throw new SysException(ResultType.error("用户已注册"));
+        }
+
+        gyUsersDao.save(gyUsers);
+
+        GyUserPerm gyUserPerm = new GyUserPerm();
+        gyUserPerm.setUserId(gyUsers.getId());
+        gyUserPerm.setUserPerm(perms);
+        gyUserPerm.setIsDeleted(false);
+        gyUserPermDao.save(gyUserPerm);
+
+        GyUserRole gyUserRole = new GyUserRole();
+        gyUserRole.setIsDeleted(false);
+        gyUserRole.setUserId(gyUsers.getId());
+        gyUserRole.setUserRole(roles);
+        gyUserRoleDao.save(gyUserRole);
         return ResultType.success();
     }
 }

@@ -30,4 +30,9 @@ public class GyUserPermDaoImpl implements GyUserPermDao {
     public void update(GyUserPerm gyUserPerm) {
         gyUserPermMapper.updateById(gyUserPerm);
     }
+
+    @Override
+    public void save(GyUserPerm gyUserPerm) {
+        gyUserPermMapper.insert(gyUserPerm);
+    }
 }
