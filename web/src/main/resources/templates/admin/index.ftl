@@ -61,7 +61,7 @@
                     <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
                 </li>
                 <li class="layui-nav-item layuimini-setting">
-                    <a href="javascript:;">${user.username}</a>
+                    <a id="uname" href="javascript:;">${user.username}</a>
                     <dl class="layui-nav-child">
                         <dd>
                             <a href="javascript:;" layuimini-content-href="/users/setting" data-title="基本资料"
@@ -135,6 +135,33 @@
 <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script src="/static/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
 <script>
+
+    $(function () {
+        var socket;
+        //判断当前浏览器是否支持websocket
+        if (window.WebSocket) {
+            socket = new WebSocket("ws://localhost:9898/websocket");
+            socket.onmessage = function (result) {
+                console.log(JSON.stringify(result.data));
+            }
+            //连接开启事件
+            socket.onopen = function (result) {
+                console.log(JSON.stringify(result));
+                console.log("开始连接")
+                var username = $("#uname").text();
+                var msg = {"code": 1, "msg": username};
+                socket.send(JSON.stringify(msg));
+
+            }
+
+            socket.onclose = function (result) {
+                console.log("连接关闭")
+                console.log(JSON.stringify(result));
+            }
+        } else {
+            alert("您的浏览器不支持websocket");
+        }
+    })
     layui.use(['jquery', 'layer', 'miniAdmin', 'miniTongji'], function () {
         var $ = layui.jquery,
             layer = layui.layer,

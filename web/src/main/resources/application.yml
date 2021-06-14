@@ -12,7 +12,7 @@ spring:
     active: pro
   redis:
     timeout: 5000
-    password: 123456
+    password: gy@123456
     host: 127.0.0.1
     port: 6379
   datasource:
@@ -59,3 +59,8 @@ xxl:
       port: 9997
       logpath: ./xxllog
       logretentiondays: 30
+
+#netty
+netty:
+  websocket:
+    port: 9898

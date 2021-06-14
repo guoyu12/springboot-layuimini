@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anshark.mapper.GyDataStatisticsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.anshark.model.GyDataStatistics">
+        <id column="id" property="id" />
+        <result column="total_user_count" property="totalUserCount" />
+        <result column="total_user_online_count" property="totalUserOnlineCount" />
+        <result column="total_browse_count" property="totalBrowseCount" />
+        <result column="total_browse_today_count" property="totalBrowseTodayCount" />
+        <result column="update_at" property="updateAt" />
+        <result column="create_at" property="createAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, total_user_count, total_user_online_count, total_browse_count, total_browse_today_count, update_at, create_at
+    </sql>
+
+</mapper>

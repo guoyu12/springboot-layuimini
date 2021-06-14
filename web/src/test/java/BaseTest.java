@@ -1,9 +1,12 @@
 import com.alibaba.fastjson.JSONObject;
 import com.anshark.GyadminApplication;
 import com.anshark.dao.GyMenusDao;
+import com.anshark.mapper.GyDataStatisticsMapper;
+import com.anshark.model.GyDataStatistics;
 import com.anshark.model.GyMenus;
 import com.anshark.utils.Md5Utils;
 import com.anshark.utils.SpringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,8 @@ public class BaseTest {
 
     @Autowired
     private GyMenusDao gyMenusDao;
+    @Autowired
+    private GyDataStatisticsMapper gyDataStatisticsMapper;
 
     @Test
     public void test1(){
@@ -32,8 +37,9 @@ public class BaseTest {
 
     @Test
     public void test2(){
-        List<GyMenus> menuInfo = gyMenusDao.getMenusBy(4, 2, Arrays.asList(5,6,7));
-
-        System.out.println(JSONObject.toJSONString(menuInfo));
+        String date = "2021-06-14";
+        QueryWrapper<GyDataStatistics> queryWrapper = new QueryWrapper<>();
+        queryWrapper.apply("date_format(create_at,'%Y-%m-%d') = '"+date+"'");
+        System.out.println(gyDataStatisticsMapper.selectOne(queryWrapper));
     }
 }
