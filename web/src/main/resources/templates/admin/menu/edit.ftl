@@ -63,7 +63,13 @@
                     <input type="radio" name="isMenu" value="2" title="目录" <#if menu.isMenu == 2>checked="checked"</#if>>
                 </div>
             </div>
-
+            <div class="layui-form-item">
+                <label class="layui-form-label">是否是快捷入口</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="isQuickEntry" value="0" title="非快捷入口" <#if menu.isQuickEntry == 0>checked="checked"</#if> >
+                    <input type="radio" name="isQuickEntry" value="1" title="快捷入口" <#if menu.isQuickEntry == 1>checked="checked"</#if> >
+                </div>
+            </div>
             <div class='layui-form-item'>
                 <div class='layui-input-block'>
                     <button class='layui-btn layui-btn-normal' lay-submit lay-filter='menuEdit'>确认保存</button>

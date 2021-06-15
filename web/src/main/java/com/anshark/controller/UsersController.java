@@ -5,6 +5,7 @@ import com.anshark.annotation.CheckLogin;
 import com.anshark.controller.common.BaseController;
 import com.anshark.model.GyUsers;
 import com.anshark.response.ResultType;
+import com.anshark.service.GyDataStatisticsService;
 import com.anshark.service.GyMenusService;
 import com.anshark.service.GyRolesService;
 import com.anshark.service.GyUsersService;
@@ -35,6 +36,8 @@ public class UsersController extends BaseController {
     private GyUsersService gyUsersService;
     @Autowired
     private GyRolesService gyRolesService;
+    @Autowired
+    private GyDataStatisticsService gyDataStatisticsService;
 
     @GetMapping("/index")
     public String index(HttpServletRequest request, Model model) {
@@ -46,6 +49,8 @@ public class UsersController extends BaseController {
     public String home(HttpServletRequest request, Model model) {
         GyUsers byId = gyUsersService.findById(getUserId(request));
         model.addAttribute("uname", byId.getUsername());
+        model.addAttribute("quickEntryList", gyMenusService.quickEntryList());
+        model.addAttribute("data", JSONObject.toJSONString(gyDataStatisticsService.statistics()));
         return "/admin/home/home";
     }
 

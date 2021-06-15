@@ -40,7 +40,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">类型</label>
                 <div class="layui-input-block">
-                    <input type="radio" name="isMenu" value="0" title="菜单">
+                    <input type="radio" name="isMenu" value="0" title="菜单" checked="checked">
                     <input type="radio" name="isMenu" value="1" title="按钮">
                     <input type="radio" name="isMenu" value="2" title="目录">
                 </div>
@@ -49,10 +49,18 @@
             <div class="layui-form-item">
                 <label class="layui-form-label required">打开方式</label>
                 <div class="layui-input-inline">
-                    <input type="radio" name="target" value="_self" title="本窗口">
+                    <input type="radio" name="target" value="_self" title="本窗口" checked="checked">
                     <input type="radio" name="target" value="_blank" title="新窗口">
                 </div>
 
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">是否是快捷入口</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="isQuickEntry" value="0" title="非快捷入口" checked="checked">
+                    <input type="radio" name="isQuickEntry" value="1" title="快捷入口">
+                </div>
             </div>
 
             <div class='layui-form-item'>

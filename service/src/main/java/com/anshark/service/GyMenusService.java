@@ -3,6 +3,8 @@ package com.anshark.service;
 import com.anshark.model.GyMenus;
 import com.anshark.response.ResultType;
 
+import java.util.List;
+
 /**
  * @Author GUOYU
  * @Date 2021/5/26
@@ -56,5 +58,11 @@ public interface GyMenusService {
      * @return
      */
     ResultType userTree();
+
+    /**
+     * 快捷入口菜单
+     * @return
+     */
+    List<GyMenus> quickEntryList();
 
 }

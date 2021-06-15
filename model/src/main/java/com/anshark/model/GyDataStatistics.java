@@ -50,5 +50,10 @@ public class GyDataStatistics implements Serializable {
 
     private LocalDateTime createAt;
 
+    /**
+     * 日在线数
+     */
+    private Integer totalUserOnlineCountStatistics;
+
 
 }

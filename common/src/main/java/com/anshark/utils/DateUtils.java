@@ -2,6 +2,7 @@ package com.anshark.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -58,6 +59,17 @@ public class DateUtils {
         long d2Time = d2.getTime();
         double day = (double) (d2Time - d1Time) / 1000 / 60 / 60 / 24;
         return Math.round(day);
+    }
+
+    /**
+     * @param n 正代表n天后  负代表n -n天前
+     * @return
+     */
+    public static Date day(int n) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, n);
+        Date date = calendar.getTime();
+        return date;
     }
 
 }

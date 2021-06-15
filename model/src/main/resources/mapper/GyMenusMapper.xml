@@ -15,11 +15,12 @@
         <result column="update_at" property="updateAt" />
         <result column="type" property="type" />
         <result column="target" property="target" />
+        <result column="is_quick_entry" property="isQuickEntry" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, href, image, icon, parent_id, is_deleted, create_at, update_at, type, target
+        id, title, href, image, icon, parent_id, is_deleted, create_at, update_at, type, target,is_quick_entry
     </sql>
 
 </mapper>

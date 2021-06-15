@@ -74,8 +74,14 @@ public class GyMenus implements Serializable {
 
     @TableField(exist = false)
     private List<GyMenus> child;
-
+    /**
+     * 0菜单1按钮2目录
+     */
     private Integer isMenu;
+    /**
+     * 1是快捷入口0不是快捷入口 最多只能有七个
+     */
+    private Integer isQuickEntry;
 
 
 }

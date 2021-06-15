@@ -59,4 +59,15 @@ public interface GyMenusDao {
      */
     void save(GyMenus gyMenus);
 
+    /**
+     * 快捷入口的数量
+     * @return
+     */
+    Integer quickEntryCount();
+
+    /**
+     * 快捷入口菜单
+     * @return
+     */
+    List<GyMenus> quickEntryList();
 }

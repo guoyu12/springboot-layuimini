@@ -79,11 +79,20 @@ public class DataStatisticsHandler {
         if (null == gyDataStatistics) {
             isNull = true;
             gyDataStatistics = new GyDataStatistics();
+            gyDataStatistics.setTotalUserOnlineCount(0);
+            gyDataStatistics.setTotalUserOnlineCountStatistics(0);
         }
+        //旧的在线人数
+        int totalUserOnlineCount = gyDataStatistics.getTotalUserOnlineCount();
+        //当前数据
         int count = 0;
         Map<String, Channel> map = CustomerSocketHandler.map;
         if (null != map) {
             count = map.size();
+        }
+        //如果在线人数大于旧的人数表示有新的数据登录
+        if (count > totalUserOnlineCount) {
+            gyDataStatistics.setTotalUserOnlineCountStatistics(gyDataStatistics.getTotalUserOnlineCountStatistics() + count - totalUserOnlineCount);
         }
         log.info("在线用户数 -> {}", count);
         gyDataStatistics.setTotalUserOnlineCount(count);

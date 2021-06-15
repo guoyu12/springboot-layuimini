@@ -36,6 +36,7 @@
 </head>
 <body>
 <input type="hidden" value="${uname}" id="uname">
+<input type="hidden" value="${data}" id="datas">
 <div class="layuimini-container">
     <div class="layuimini-main">
         <div class="layui-row layui-col-space15">
@@ -114,48 +115,14 @@
                             <div class="layui-card-body">
                                 <div class="welcome-module">
                                     <div class="layui-row layui-col-space10 layuimini-qiuck">
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="page/menu.html" data-title="菜单管理" data-icon="fa fa-window-maximize">
-                                                <i class="fa fa-window-maximize"></i>
-                                                <cite>菜单管理</cite>
-                                            </a>
-                                        </div>
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="page/setting.html" data-title="系统设置" data-icon="fa fa-gears">
-                                                <i class="fa fa-gears"></i>
-                                                <cite>系统设置</cite>
-                                            </a>
-                                        </div>
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="page/table.html" data-title="表格示例" data-icon="fa fa-file-text">
-                                                <i class="fa fa-file-text"></i>
-                                                <cite>表格示例</cite>
-                                            </a>
-                                        </div>
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="page/icon.html" data-title="图标列表" data-icon="fa fa-dot-circle-o">
-                                                <i class="fa fa-dot-circle-o"></i>
-                                                <cite>图标列表</cite>
-                                            </a>
-                                        </div>
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="page/form.html" data-title="表单示例" data-icon="fa fa-calendar">
-                                                <i class="fa fa-calendar"></i>
-                                                <cite>表单示例</cite>
-                                            </a>
-                                        </div>
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="page/404.html" data-title="404页面" data-icon="fa fa-hourglass-end">
-                                                <i class="fa fa-hourglass-end"></i>
-                                                <cite>404页面</cite>
-                                            </a>
-                                        </div>
-                                        <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="page/button.html" data-title="按钮示例" data-icon="fa fa-snowflake-o">
-                                                <i class="fa fa-snowflake-o"></i>
-                                                <cite>按钮示例</cite>
-                                            </a>
-                                        </div>
+                                        <#list quickEntryList as list>
+                                            <div class="layui-col-xs3 layuimini-qiuck-module">
+                                                <a href="javascript:;" layuimini-content-href="${list.href}" data-title="${list.title}" data-icon="${list.icon}">
+                                                    <i class="${list.icon}"></i>
+                                                    <cite>${list.title}</cite>
+                                                </a>
+                                            </div>
+                                        </#list>
                                         <div class="layui-col-xs3 layuimini-qiuck-module">
                                             <a href="javascript:;" layuimini-content-href="https://www.baidu.com" data-title="百度搜索" data-icon="fa fa-search">
                                                 <i class="fa fa-search"></i>
@@ -362,10 +329,6 @@
                     $("#totalUserOnlineCount").html(obj.data.totalUserOnlineCount);
                     $("#totalBrowseCount").html(obj.data.totalBrowseCount);
                     $("#totalBrowseTodayCount").html(obj.data.totalBrowseTodayCount);
-                    console.log("用户总数 -> " + obj.data.totalUserCount);
-                    console.log("用户在线总数 -> " + obj.data.totalUserOnlineCount);
-                    console.log("浏览总数 -> " + obj.data.totalBrowseCount);
-                    console.log("当日浏览数 -> " + obj.data.totalBrowseTodayCount);
                 }
             }
             //连接开启事件
@@ -425,6 +388,8 @@
             });
         });
 
+        var d = ${data};
+
         /**
          * 报表功能
          */
@@ -434,7 +399,7 @@
                 trigger: 'axis'
             },
             legend: {
-                data:['邮件营销','联盟广告','视频广告','直接访问','搜索引擎']
+                data: d.types
             },
             grid: {
                 left: '3%',
@@ -450,38 +415,12 @@
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: ['周一','周二','周三','周四','周五','周六','周日']
+                data: d.dates
             },
             yAxis: {
                 type: 'value'
             },
-            series: [
-                {
-                    name:'邮件营销',
-                    type:'line',
-                    data:[120, 132, 101, 134, 90, 230, 210]
-                },
-                {
-                    name:'联盟广告',
-                    type:'line',
-                    data:[220, 182, 191, 234, 290, 330, 310]
-                },
-                {
-                    name:'视频广告',
-                    type:'line',
-                    data:[150, 232, 201, 154, 190, 330, 410]
-                },
-                {
-                    name:'直接访问',
-                    type:'line',
-                    data:[320, 332, 301, 334, 390, 330, 320]
-                },
-                {
-                    name:'搜索引擎',
-                    type:'line',
-                    data:[820, 932, 901, 934, 1290, 1330, 1320]
-                }
-            ]
+            series: d.series
         };
         echartsRecords.setOption(optionRecords);
 

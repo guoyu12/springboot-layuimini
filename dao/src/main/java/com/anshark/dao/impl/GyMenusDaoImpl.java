@@ -65,13 +65,29 @@ public class GyMenusDaoImpl implements GyMenusDao {
     public List<GyMenus> findByPid(Integer parentId) {
         QueryWrapper<GyMenus> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("is_deleted", 0);
-        queryWrapper.eq("parent_id",parentId);
+        queryWrapper.eq("parent_id", parentId);
         return gyMenusMapper.selectList(queryWrapper);
     }
 
     @Override
     public void save(GyMenus gyMenus) {
         gyMenusMapper.insert(gyMenus);
+    }
+
+    @Override
+    public Integer quickEntryCount() {
+        QueryWrapper<GyMenus> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("is_deleted", 0);
+        queryWrapper.eq("is_quick_entry", 1);
+        return gyMenusMapper.selectCount(queryWrapper);
+    }
+
+    @Override
+    public List<GyMenus> quickEntryList() {
+        QueryWrapper<GyMenus> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("is_deleted", 0);
+        queryWrapper.eq("is_quick_entry", 1);
+        return gyMenusMapper.selectList(queryWrapper);
     }
 
 }

@@ -118,6 +118,7 @@ public class GyMenusServiceImpl implements GyMenusService {
 
     @Override
     public ResultType update(GyMenus gyMenus) {
+        checkQuickEntryCount(gyMenus.getIsQuickEntry());
         GyMenus get = gyMenusDao.findById(gyMenus.getId());
         get.setTitle(gyMenus.getTitle());
         get.setHref(gyMenus.getHref());
@@ -126,12 +127,22 @@ public class GyMenusServiceImpl implements GyMenusService {
         get.setParentId(gyMenus.getParentId());
         get.setSort(gyMenus.getSort());
         get.setIsMenu(gyMenus.getIsMenu());
+        get.setIsQuickEntry(gyMenus.getIsQuickEntry());
         gyMenusDao.update(get);
         return ResultType.success();
     }
 
+    void checkQuickEntryCount(Integer isQuickEntry) {
+        if (isQuickEntry == 1) {
+            if (gyMenusDao.quickEntryCount() > 7) {
+                throw new SysException(ResultType.error("快捷入口最多只能设置7个"));
+            }
+        }
+    }
+
     @Override
     public ResultType add(GyMenus gyMenus) {
+        checkQuickEntryCount(gyMenus.getIsQuickEntry());
         gyMenusDao.save(gyMenus);
         return ResultType.success();
     }
@@ -142,6 +153,11 @@ public class GyMenusServiceImpl implements GyMenusService {
         List<UserTreeVO> treeVOList = menusToTree(list);
         loadMenu(treeVOList);
         return ResultType.success(treeVOList);
+    }
+
+    @Override
+    public List<GyMenus> quickEntryList() {
+        return gyMenusDao.quickEntryList();
     }
 
     void loadMenu(List<UserTreeVO> treeVOList) {
