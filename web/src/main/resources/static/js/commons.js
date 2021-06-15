@@ -45,6 +45,8 @@ const USER_EDIT_URL = "/users/editSubmit";
 //新增用户
 const USER_ADD_URL = "/users/addSubmit";
 
+const HOME_WEB_SOCKET_DATA = "ws://localhost:9898/websocket";
+
 function setCookie(cname,cvalue,exdays){
     var d = new Date();
     d.setTime(d.getTime()+(exdays*24*60*60*1000));

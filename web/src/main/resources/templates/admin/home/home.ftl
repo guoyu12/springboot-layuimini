@@ -35,6 +35,7 @@
     </style>
 </head>
 <body>
+<input type="hidden" value="${uname}" id="uname">
 <div class="layuimini-container">
     <div class="layuimini-main">
         <div class="layui-row layui-col-space15">
@@ -54,8 +55,8 @@
                                                         <h5>用户统计</h5>
                                                     </div>
                                                     <div class="panel-content">
-                                                        <h1 class="no-margins">1234</h1>
-                                                        <small>当前分类总记录数</small>
+                                                        <h1 class="no-margins" id="totalUserCount">0</h1>
+                                                        <small>历史用户数</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -65,11 +66,11 @@
                                                 <div class="panel-body">
                                                     <div class="panel-title">
                                                         <span class="label pull-right layui-bg-cyan">实时</span>
-                                                        <h5>商品统计</h5>
+                                                        <h5>在线用户数</h5>
                                                     </div>
                                                     <div class="panel-content">
-                                                        <h1 class="no-margins">1234</h1>
-                                                        <small>当前分类总记录数</small>
+                                                        <h1 class="no-margins" id="totalUserOnlineCount">0</h1>
+                                                        <small>在线用户数</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -79,11 +80,11 @@
                                                 <div class="panel-body">
                                                     <div class="panel-title">
                                                         <span class="label pull-right layui-bg-orange">实时</span>
-                                                        <h5>浏览统计</h5>
+                                                        <h5>浏览总数</h5>
                                                     </div>
                                                     <div class="panel-content">
-                                                        <h1 class="no-margins">1234</h1>
-                                                        <small>当前分类总记录数</small>
+                                                        <h1 class="no-margins" id="totalBrowseCount">0</h1>
+                                                        <small>历史浏览总数</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -93,11 +94,11 @@
                                                 <div class="panel-body">
                                                     <div class="panel-title">
                                                         <span class="label pull-right layui-bg-green">实时</span>
-                                                        <h5>订单统计</h5>
+                                                        <h5>当日浏览数</h5>
                                                     </div>
                                                     <div class="panel-content">
-                                                        <h1 class="no-margins">1234</h1>
-                                                        <small>当前分类总记录数</small>
+                                                        <h1 class="no-margins" id="totalBrowseTodayCount">0</h1>
+                                                        <small>日浏览数</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -343,9 +344,48 @@
         </div>
     </div>
 </div>
+<script src="/static/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="/static/js/commons.js" charset="UTF-8"></script>
 <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script src="/static/js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script>
+    $(function () {
+
+        var socket;
+        //判断当前浏览器是否支持websocket
+        if (window.WebSocket) {
+            socket = new WebSocket(HOME_WEB_SOCKET_DATA);
+            socket.onmessage = function (result) {
+                var obj = eval('(' + result.data + ')');
+                if(obj.code == 0){
+                    $("#totalUserCount").html(obj.data.totalUserCount);
+                    $("#totalUserOnlineCount").html(obj.data.totalUserOnlineCount);
+                    $("#totalBrowseCount").html(obj.data.totalBrowseCount);
+                    $("#totalBrowseTodayCount").html(obj.data.totalBrowseTodayCount);
+                    console.log("用户总数 -> " + obj.data.totalUserCount);
+                    console.log("用户在线总数 -> " + obj.data.totalUserOnlineCount);
+                    console.log("浏览总数 -> " + obj.data.totalBrowseCount);
+                    console.log("当日浏览数 -> " + obj.data.totalBrowseTodayCount);
+                }
+            }
+            //连接开启事件
+            socket.onopen = function (result) {
+                // console.log("开始连接")
+                var username = $("#uname").val();
+                // console.log("username == " + username);
+                var msg = {"code": 1, "msg": username};
+                socket.send(JSON.stringify(msg));
+
+            }
+
+            socket.onclose = function (result) {
+                // console.log("连接关闭")
+                console.log(JSON.stringify(result));
+            }
+        } else {
+            alert("您的浏览器不支持websocket");
+        }
+    })
     layui.use(['layer', 'miniTab','echarts'], function () {
         var $ = layui.jquery,
             layer = layui.layer,

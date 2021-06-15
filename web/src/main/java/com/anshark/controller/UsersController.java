@@ -43,7 +43,9 @@ public class UsersController extends BaseController {
     }
 
     @GetMapping("/home")
-    public String home() {
+    public String home(HttpServletRequest request, Model model) {
+        GyUsers byId = gyUsersService.findById(getUserId(request));
+        model.addAttribute("uname", byId.getUsername());
         return "/admin/home/home";
     }
 
