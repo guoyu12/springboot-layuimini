@@ -26,4 +26,5 @@ public class GyRolesDaoImpl implements GyRolesDao {
         queryWrapper.eq("is_deleted", 0);
         return gyRolesMapper.selectList(queryWrapper);
     }
+
 }

@@ -155,7 +155,7 @@ public class GyUsersServiceImpl implements GyUsersService {
     }
 
     @Override
-    public ResultType edit(GyUsers gyUsers) {
+    public ResultType edit(GyUsers gyUsers, String roles, String perms) {
         Integer id = gyUsers.getId();
         if (null == id) {
             return ResultType.error("用户id不存在");
@@ -170,6 +170,14 @@ public class GyUsersServiceImpl implements GyUsersService {
         user.setPhone(gyUsers.getPhone());
 
         gyUsersDao.update(user);
+
+        GyUserRole gyUserRole = gyUserRoleDao.findByUserId(id);
+        gyUserRole.setUserRole(roles);
+        gyUserRoleDao.update(gyUserRole);
+
+        GyUserPerm gyUserPerm = gyUserPermDao.findByUserId(id);
+        gyUserPerm.setUserPerm(perms);
+        gyUserPermDao.update(gyUserPerm);
 
         return ResultType.success();
     }

@@ -16,7 +16,7 @@ public class ResultType {
 
     private Object data;
 
-    private Integer count;
+    private int count;
 
     public ResultType(int code, String msg) {
         this.code = code;
@@ -29,7 +29,7 @@ public class ResultType {
         this.data = data;
     }
 
-    public ResultType(int code, String msg, Object data, Integer count) {
+    public ResultType(int code, String msg, Object data, int count) {
         this.code = code;
         this.msg = msg;
         this.data = data;
@@ -47,7 +47,7 @@ public class ResultType {
         this.data = data;
     }
 
-    public ResultType(ResultState resultState, Object data, Integer count) {
+    public ResultType(ResultState resultState, Object data, int count) {
         this.code = resultState.code;
         this.msg = resultState.msg;
         this.data = data;
@@ -58,7 +58,7 @@ public class ResultType {
         return new ResultType(ResultState.SYS_SUCCESS.code, ResultState.SYS_SUCCESS.msg, data);
     }
 
-    public static ResultType success(Object data, Integer count) {
+    public static ResultType success(Object data, int count) {
         return new ResultType(ResultState.SYS_SUCCESS.code, ResultState.SYS_SUCCESS.msg, data, count);
     }
 

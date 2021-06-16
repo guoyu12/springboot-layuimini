@@ -1,5 +1,6 @@
 package com.anshark.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.anshark.dao.GyMenusDao;
 import com.anshark.dao.GyUsersDao;
 import com.anshark.exception.SysException;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * @Author GUOYU
@@ -148,10 +150,12 @@ public class GyMenusServiceImpl implements GyMenusService {
     }
 
     @Override
-    public ResultType userTree() {
+    public ResultType userTree(Integer userId) {
+
         List<GyMenus> list = gyMenusDao.findByPid(-1);
-        List<UserTreeVO> treeVOList = menusToTree(list);
-        loadMenu(treeVOList);
+        List<UserTreeVO> treeVOList = menusToTree(list, userId);
+        loadMenu(treeVOList, userId);
+
         return ResultType.success(treeVOList);
     }
 
@@ -160,18 +164,18 @@ public class GyMenusServiceImpl implements GyMenusService {
         return gyMenusDao.quickEntryList();
     }
 
-    void loadMenu(List<UserTreeVO> treeVOList) {
+    void loadMenu(List<UserTreeVO> treeVOList, Integer userId) {
         for (int i = 0; i < treeVOList.size(); i++) {
             UserTreeVO userTreeVO = treeVOList.get(i);
             List<GyMenus> list = gyMenusDao.findByPid(userTreeVO.getId());
             //转换
-            List<UserTreeVO> menusToTree = menusToTree(list);
+            List<UserTreeVO> menusToTree = menusToTree(list, userId);
             userTreeVO.setChildren(menusToTree);
-            loadMenu(menusToTree);
+            loadMenu(menusToTree, userId);
         }
     }
 
-    List<UserTreeVO> menusToTree(List<GyMenus> menus) {
+    List<UserTreeVO> menusToTree(List<GyMenus> menus, Integer userId) {
 
         List<UserTreeVO> menusToTree = new ArrayList<>();
 
@@ -180,11 +184,26 @@ public class GyMenusServiceImpl implements GyMenusService {
             treeVO.setId(s.getId());
             treeVO.setField("name");
             treeVO.setTitle(s.getTitle());
-            treeVO.setChecked(false);
-            treeVO.setSpread(false);
+
+            treeVO.setSpread(true);
+            if (null != userId) {
+                System.out.println("s.getId = " + s.getId() + " userId =  " + userId + " bool = " + isHasPerms(userId, s.getId()));
+                treeVO.setChecked(isHasPerms(userId, s.getId()));
+            } else {
+                treeVO.setChecked(false);
+            }
             menusToTree.add(treeVO);
         });
         return menusToTree;
+    }
+
+    boolean isHasPerms(Integer userId, Integer permId) {
+        List<Integer> perms = gyUserPermService.getPerms(userId);
+        GyMenus gyMenu = gyMenusDao.findById(permId);
+        if (null != gyMenu) {
+            return perms.contains(permId) && gyMenu.getIsMenu() == 0;
+        }
+        return false;
     }
 
     /**

@@ -83,9 +83,11 @@ public interface GyUsersService {
      * 编辑
      *
      * @param gyUsers
+     * @param roles
+     * @param perms
      * @return
      */
-    ResultType edit(GyUsers gyUsers);
+    ResultType edit(GyUsers gyUsers, String roles, String perms);
 
     /**
      * 新增用户

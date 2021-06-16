@@ -38,14 +38,14 @@ const USER_LIST_URL = "/users/list";
 const USERSETTING_SUBMIT_URL = "/users/settingSubmit";
 //用户删除
 const USER_DEL_URL = "/users/del";
-
 //编辑用户
 const USER_EDIT_URL = "/users/editSubmit";
-
 //新增用户
 const USER_ADD_URL = "/users/addSubmit";
-
+//netty
 const HOME_WEB_SOCKET_DATA = "ws://localhost:9898/websocket";
+//公告
+const NOTICE_LIST = "/notice/list";
 
 function setCookie(cname,cvalue,exdays){
     var d = new Date();

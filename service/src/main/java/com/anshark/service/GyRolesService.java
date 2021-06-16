@@ -1,6 +1,9 @@
 package com.anshark.service;
 
+import com.anshark.model.GyRoles;
 import com.anshark.response.ResultType;
+
+import java.util.List;
 
 /**
  * @Author GUOYU
@@ -10,5 +13,12 @@ import com.anshark.response.ResultType;
 public interface GyRolesService {
 
     ResultType roles();
+
+    /**
+     * 处理数据
+     * @param userId
+     * @return
+     */
+    List<GyRoles> dealEditData(Integer userId);
 
 }

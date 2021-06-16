@@ -42,7 +42,20 @@
             <input type="email" name="email" placeholder="请输入邮箱" value="${user.email}" class="layui-input">
         </div>
     </div>
-
+    <div class="layui-form-item">
+        <label class="layui-form-label required">权限设置</label>
+        <div class="layui-input-block">
+            <div id="menuTree" class="demo-tree-more"></div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">角色设置</label>
+        <div class="layui-input-block">
+            <#list roles as list>
+                <input type="checkbox" name="roles" title="${list.roleName}" value="${list.id}" <#if list.isCheck == 1>checked="checked"</#if>>
+            </#list>
+        </div>
+    </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
@@ -53,14 +66,55 @@
 <script src="/static/js/commons.js" charset="UTF-8"></script>
 <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script>
-    layui.use(['form'], function () {
+    layui.use(['form','tree'], function () {
         var form = layui.form,
             layer = layui.layer,
+            tree = layui.tree,
             $ = layui.$;
+
+        // //基本演示
+        tree.render({
+            elem: '#menuTree'
+            ,data: ${data}
+            ,id: 'menuTree'
+            ,showCheckbox: true
+            ,isJump: true //是否允许点击节点时弹出新窗口跳转
+            // ,operate: function(obj){
+            //     console.log("==1==")
+            //     console.log(JSON.stringify(obj))
+            //     // console.log(obj.type);
+            //     // console.log(obj.data);
+            //     // if(obj.type === 'add'){
+            //     //     return "1531514";
+            //     // }
+            //     // if(obj.type == 'del'){
+            //     // }
+            // }
+            // ,click: function(obj){
+            //     console.log("==2==")
+            //     console.log(JSON.stringify(obj))
+            //     // var data = obj.data;  //获取当前点击的节点数据
+            //     // layer.msg('状态：'+ obj.state + '<br>节点数据：' + JSON.stringify(data));
+            // }
+        });
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
             layer.confirm('确定要更新?', {icon: 3, title:'更新'}, function(index){
+
+                var checkedData = tree.getChecked('menuTree');
+                var perms = getCheckedList(checkedData);
+
+                var roleStr = "";
+                $('input[name="roles"]:checked').each(function(){
+                    roleStr += $(this).val()+",";
+                });
+
+                var roles = roleStr.substr(0,roleStr.length-1);
+
+                data.field.perms = perms;
+                data.field.roles = roles;
+
                 $.ajax({
                     url: USER_EDIT_URL,
                     type: 'POST',
@@ -90,6 +144,25 @@
 
             return false;
         });
+
+
+        // 获取选中节点的id
+        function getCheckedList(data) {
+            var id = "";
+            $.each(data, function (index, item) {
+                if (id != "") {
+                    id = id + "," + item.id;
+                }
+                else {
+                    id = item.id;
+                }
+                var i = getCheckedList(item.children);
+                if (i != "") {
+                    id = id + "," + i;
+                }
+            });
+            return id;
+        }
 
     });
 </script>

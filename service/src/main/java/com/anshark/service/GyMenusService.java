@@ -57,7 +57,7 @@ public interface GyMenusService {
      * 用户菜单
      * @return
      */
-    ResultType userTree();
+    ResultType userTree(Integer userId);
 
     /**
      * 快捷入口菜单

@@ -30,6 +30,10 @@ public class GyDataStatisticsServiceImpl implements GyDataStatisticsService {
             Date date = DateUtils.day(0 - i);
             dateStrList.add(DateUtils.getDateStr(date, DateUtils.DATE));
         }
+
+        //倒序
+        Collections.reverse(dateStrList);
+
         //日期
         map.put("dates", dateStrList);
 
