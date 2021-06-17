@@ -123,23 +123,6 @@
             return false;
         });
 
-        // 获取选中节点的id
-        function getCheckedList(data) {
-            var id = "";
-            $.each(data, function (index, item) {
-                if (id != "") {
-                    id = id + "," + item.id;
-                }
-                else {
-                    id = item.id;
-                }
-                var i = getCheckedList(item.children);
-                if (i != "") {
-                    id = id + "," + i;
-                }
-            });
-            return id;
-        }
 
     });
 </script>
