@@ -22,6 +22,15 @@ public class GyDataStatisticsDaoImpl implements GyDataStatisticsDao {
     public GyDataStatistics findByDay(String format, String date) {
         QueryWrapper<GyDataStatistics> queryWrapper = new QueryWrapper<>();
         queryWrapper.apply("date_format(create_at,'" + format + "') = '" + date + "'");
-        return gyDataStatisticsMapper.selectOne(queryWrapper);
+        GyDataStatistics gyDataStatistics = gyDataStatisticsMapper.selectOne(queryWrapper);
+        if (null == gyDataStatistics) {
+            gyDataStatistics = new GyDataStatistics();
+            gyDataStatistics.setTotalUserOnlineCountStatistics(0);
+            gyDataStatistics.setTotalUserOnlineCount(0);
+            gyDataStatistics.setTotalUserCount(0);
+            gyDataStatistics.setTotalBrowseCount(0);
+            gyDataStatistics.setTotalBrowseTodayCount(0);
+        }
+        return gyDataStatistics;
     }
 }

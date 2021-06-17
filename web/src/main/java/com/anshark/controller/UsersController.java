@@ -3,6 +3,7 @@ package com.anshark.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.anshark.annotation.CheckLogin;
 import com.anshark.controller.common.BaseController;
+import com.anshark.eum.SysConfigEnum;
 import com.anshark.model.GyUsers;
 import com.anshark.response.ResultType;
 import com.anshark.service.*;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,9 +36,13 @@ public class UsersController extends BaseController {
     @Autowired
     private GyRolesService gyRolesService;
     @Autowired
+    private GySystemNoticeService gySystemNoticeService;
+    @Autowired
+    private GyProjectInfoService gyProjectInfoService;
+    @Autowired
     private GyDataStatisticsService gyDataStatisticsService;
     @Autowired
-    private GySystemNoticeService gySystemNoticeService;
+    private GySysConfigService gySysConfigService;
 
     @GetMapping("/index")
     public String index(HttpServletRequest request, Model model) {
@@ -48,9 +54,12 @@ public class UsersController extends BaseController {
     public String home(HttpServletRequest request, Model model) {
         GyUsers byId = gyUsersService.findById(getUserId(request));
         model.addAttribute("uname", byId.getUsername());
-        model.addAttribute("quickEntryList", gyMenusService.quickEntryList());
-        model.addAttribute("data", JSONObject.toJSONString(gyDataStatisticsService.statistics()));
         model.addAttribute("notice", gySystemNoticeService.list());
+        model.addAttribute("pro", gyProjectInfoService.getGyProjectInfo());
+        model.addAttribute("quickEntryList", gyMenusService.quickEntryList());
+        model.addAttribute("datastatist", gyDataStatisticsService.findByDate(new Date()));
+        model.addAttribute("reportForm", JSONObject.toJSONString(gyDataStatisticsService.statistics()));
+        model.addAttribute("authercontent", gySysConfigService.findByCfgName(SysConfigEnum.AUTHOR_CONTENT.name()).getCfgValue());
         return "/admin/home/home";
     }
 

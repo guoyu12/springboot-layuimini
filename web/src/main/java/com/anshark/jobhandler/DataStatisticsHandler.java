@@ -1,6 +1,7 @@
 package com.anshark.jobhandler;
 
 import com.alibaba.fastjson.JSONObject;
+import com.anshark.dao.GyDataStatisticsDao;
 import com.anshark.mapper.GyDataStatisticsMapper;
 import com.anshark.mapper.GyRequestLogMapper;
 import com.anshark.mapper.GyUsersMapper;
@@ -8,7 +9,11 @@ import com.anshark.model.GyDataStatistics;
 import com.anshark.model.GyRequestLog;
 import com.anshark.model.GyUsers;
 import com.anshark.netty.websocket.handler.CustomerSocketHandler;
+import com.anshark.netty.websocket.util.MsgType;
 import com.anshark.response.ResultType;
+import com.anshark.service.GyDataStatisticsService;
+import com.anshark.service.GyMenusService;
+import com.anshark.service.GySystemNoticeService;
 import com.anshark.utils.DateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xxl.job.core.handler.annotation.XxlJob;
@@ -37,6 +42,14 @@ public class DataStatisticsHandler {
     private GyUsersMapper gyUsersMapper;
     @Autowired
     private GyRequestLogMapper gyRequestLogMapper;
+    @Autowired
+    private GyDataStatisticsService gyDataStatisticsService;
+    @Autowired
+    private GyMenusService gyMenusService;
+    @Autowired
+    private GySystemNoticeService gySystemNoticeService;
+    @Autowired
+    private GyDataStatisticsDao gyDataStatisticsDao;
 
     public GyDataStatistics gyDataStatistics() {
         QueryWrapper<GyDataStatistics> queryWrapper = new QueryWrapper<>();
@@ -155,26 +168,63 @@ public class DataStatisticsHandler {
         }
     }
 
-    @XxlJob("push")
-    public void push() {
+    /**
+     * 实时数据
+     */
+    @XxlJob("pushData")
+    public void pushData() {
         log.info("开始push实时数据...");
-        QueryWrapper<GyDataStatistics> queryWrapper = new QueryWrapper<>();
-        queryWrapper.apply("date_format(create_at,'%Y-%m-%d') = '" + DateUtils.getDateStr(new Date(), DateUtils.DATE) + "'");
-        GyDataStatistics gyDataStatistics = gyDataStatisticsMapper.selectOne(queryWrapper);
-        if (null == gyDataStatistics) {
-            gyDataStatistics = new GyDataStatistics();
-            gyDataStatistics.setTotalBrowseTodayCount(0);
-            gyDataStatistics.setTotalBrowseCount(0);
-            gyDataStatistics.setTotalUserCount(0);
-            gyDataStatistics.setTotalUserOnlineCount(0);
-        }
+        GyDataStatistics gyDataStatistics = gyDataStatisticsService.findByDate(new Date());
+        push(MsgType.CONNECTION_MSG, gyDataStatistics);
+
+    }
+
+    /**
+     * 实时报表数据
+     */
+    @XxlJob("pushReportForms")
+    public void pushReportForms() {
+        log.info("开始实时报表数据...");
+        push(MsgType.REPORT_FORMS, gyDataStatisticsService.statistics());
+
+    }
+
+    /**
+     * 实时快捷入口
+     */
+    @XxlJob("pushQuickEntry")
+    public void pushQuickEntry() {
+        log.info("开始实时快捷入口...");
+        push(MsgType.QUICK_ENTRY, gyMenusService.quickEntryList());
+    }
+
+    /**
+     * 系统公告
+     */
+    @XxlJob("pushNotice")
+    void pushNotice() {
+        log.info("开始实时系统公告");
+        push(MsgType.SYS_NOTICES, gySystemNoticeService.list());
+    }
+
+
+    /**
+     * 推送消息
+     *
+     * @param msgType
+     * @param data
+     */
+    void push(MsgType msgType, Object data) {
         Map<String, Channel> map = CustomerSocketHandler.map;
         Iterator<Map.Entry<String, Channel>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, Channel> next = iterator.next();
             Channel channel = next.getValue();
-            channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(ResultType.success(gyDataStatistics))));
+            ResultType resultType = new ResultType();
+            resultType.setCode(msgType.getCode());
+            resultType.setMsg(msgType.getMsg());
+            resultType.setData(data);
+            channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(resultType)));
         }
-
     }
 }

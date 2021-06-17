@@ -46,6 +46,16 @@ const USER_ADD_URL = "/users/addSubmit";
 const HOME_WEB_SOCKET_DATA = "ws://localhost:9898/websocket";
 //公告
 const NOTICE_LIST = "/notice/list";
+//添加公告
+const ADD_NOTICE_PAGE = "/notice/addPage";
+//公告提交
+const ADD_NOTICE_SUBMIT = "/notice/addSubmit";
+//删除公告
+const NOTICE_DEL = "/notice/del";
+//编辑公告页面
+const EDIT_NOTICE_PAGE = "/notice/editPage";
+//更新公告
+const EDIT_NOTICE_SUBMIT = "/notice/editSubmit";
 
 function setCookie(cname,cvalue,exdays){
     var d = new Date();

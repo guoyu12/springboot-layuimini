@@ -50,4 +50,9 @@ public class GySysConfigServiceImpl implements GySysConfigService {
 
         return ResultType.success();
     }
+
+    @Override
+    public GySysConfig findByCfgName(String cfgName) {
+        return gySysConfigDao.findByCfgName(cfgName);
+    }
 }

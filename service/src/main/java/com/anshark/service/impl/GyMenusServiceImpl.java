@@ -198,10 +198,17 @@ public class GyMenusServiceImpl implements GyMenusService {
     }
 
     boolean isHasPerms(Integer userId, Integer permId) {
+        //当前用户ID拥有的权限
         List<Integer> perms = gyUserPermService.getPerms(userId);
+        List<GyMenus> childs = gyMenusDao.findByPid(permId);
+        //如果拥有子类设置节点为false
+        if(childs.size() > 0){
+            return false;
+        }
+
         GyMenus gyMenu = gyMenusDao.findById(permId);
         if (null != gyMenu) {
-            return perms.contains(permId) && gyMenu.getIsMenu() == 0;
+            return perms.contains(permId);
         }
         return false;
     }

@@ -18,6 +18,8 @@ public class ResultType {
 
     private int count;
 
+    public ResultType(){}
+
     public ResultType(int code, String msg) {
         this.code = code;
         this.msg = msg;

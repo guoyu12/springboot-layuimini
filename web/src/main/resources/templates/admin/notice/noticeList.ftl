@@ -130,13 +130,13 @@
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {  // 监听添加操作
                 var index = layer.open({
-                    title: '添加用户',
+                    title: '添加公告',
                     type: 2,
                     shade: 0.2,
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '/users/add',
+                    content: ADD_NOTICE_PAGE,
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -159,7 +159,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '/users/editPage?id='+data.id,
+                    content: EDIT_NOTICE_PAGE + '?id='+data.id,
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -168,7 +168,7 @@
             } else if (obj.event === 'delete') {
                 layer.confirm('确定要删除?', {icon: 3, title:'删除'}, function(index){
                     $.ajax({
-                        url: USER_DEL_URL,
+                        url: NOTICE_DEL,
                         type: 'POST',
                         dataType: "json",
                         data: {id:data.id},
@@ -179,6 +179,7 @@
                         success: function (result) {
                             if(result.code == 0){
                                 layer.msg("删除成功");
+                                parent.location.reload();
                             }else {
                                 layer.msg(result.msg);
                             }

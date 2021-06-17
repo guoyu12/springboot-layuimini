@@ -25,4 +25,32 @@ public interface GySystemNoticeService {
      * @return
      */
     ResultType page(Integer page,Integer limit);
+
+    /**
+     * 添加公告
+     * @param gySystemNotice
+     * @return
+     */
+    ResultType addSubmit(GySystemNotice gySystemNotice);
+
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
+    ResultType del(Integer id);
+
+    /**
+     * 根据ID查找
+     * @param id
+     * @return
+     */
+    GySystemNotice findById(Integer id);
+
+    /**
+     * 提交更新
+     * @param gySystemNotice
+     * @return
+     */
+    ResultType update(GySystemNotice gySystemNotice);
 }

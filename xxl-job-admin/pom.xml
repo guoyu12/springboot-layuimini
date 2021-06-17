@@ -22,4 +22,24 @@
             <version>${mybatis-spring-boot-starter.version}</version>
         </dependency>
     </dependencies>
+    <build>
+        <finalName>gyadmin-xxljob</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.xxl.job.admin.XxlJobAdminApplication</mainClass>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

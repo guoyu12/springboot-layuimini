@@ -1,5 +1,6 @@
 package com.anshark.service;
 
+import com.anshark.model.GySysConfig;
 import com.anshark.po.SysConfigPO;
 import com.anshark.response.ResultType;
 
@@ -22,4 +23,11 @@ public interface GySysConfigService {
      * @return
      */
     ResultType submit(SysConfigPO sysConfigPO);
+
+    /**
+     * 根据name查找
+     * @param cfgName
+     * @return
+     */
+    GySysConfig findByCfgName(String cfgName);
 }

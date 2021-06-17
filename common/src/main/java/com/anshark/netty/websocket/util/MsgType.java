@@ -7,7 +7,24 @@ package com.anshark.netty.websocket.util;
  */
 public enum MsgType {
 
-    CONNECTION_MSG(1, "连接消息");
+    /**
+     * 连接消息
+     */
+    CONNECTION_MSG(1, "连接消息"),
+    /**
+     * 表单消息
+     */
+    REPORT_FORMS(2, "表单消息"),
+
+    /**
+     * 快捷入口
+     */
+    QUICK_ENTRY(3, "快捷入口"),
+
+    /**
+     * 系统公告
+     */
+    SYS_NOTICES(4,"系统公告");
 
     int code;
 

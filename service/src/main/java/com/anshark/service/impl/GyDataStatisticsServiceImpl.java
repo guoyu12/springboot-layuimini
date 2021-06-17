@@ -103,4 +103,10 @@ public class GyDataStatisticsServiceImpl implements GyDataStatisticsService {
 
         return map;
     }
+
+    @Override
+    public GyDataStatistics findByDate(Date date) {
+        GyDataStatistics gyDataStatistics = gyDataStatisticsDao.findByDay("%Y-%m-%d", DateUtils.getDateStr(date, DateUtils.DATE));
+        return gyDataStatistics;
+    }
 }
